@@ -1,6 +1,6 @@
 const TRACE_ROUNDS = 5;
 const BRUSH_COLORS = ['#FF6B6B','#FF8C42','#A569BD','#2E86C1','#28B463'];
-const COVERAGE_THRESHOLD = 0.58;
+const COVERAGE_THRESHOLD = 0.75;
 
 let traceQueue = [], traceRoundNum = 0, currentTraceWord = null, currentLetterIdx = 0;
 let letterPixelSet = null, coverageCount = 0, coveredSet = new Set();
