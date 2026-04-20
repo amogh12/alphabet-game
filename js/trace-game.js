@@ -1,11 +1,14 @@
 const TRACE_ROUNDS = 5;
 const BRUSH_COLORS = ['#FF6B6B','#FF8C42','#A569BD','#2E86C1','#28B463'];
-const COVERAGE_THRESHOLD = 0.75;
+const COVERAGE_THRESHOLD = 0.85;
 
 let traceQueue = [], traceRoundNum = 0, currentTraceWord = null, currentLetterIdx = 0;
 let letterPixelSet = null, coverageCount = 0, coveredSet = new Set();
 let traceCanvas = null, traceCtx = null, canvasSize = 280;
+let rawPaintCanvas = null, rawPaintCtx = null;
+let letterMaskCanvas = null;
 let isTracing = false, lastTX, lastTY, letterDone = false;
+let currentLetter = '';
 
 function initTraceCanvas() {
   traceCanvas = document.getElementById('trace-canvas');
@@ -19,6 +22,15 @@ function initTraceCanvas() {
   traceCtx = traceCanvas.getContext('2d');
   traceCtx.scale(dpr, dpr);
 
+  rawPaintCanvas = document.createElement('canvas');
+  rawPaintCanvas.width = canvasSize;
+  rawPaintCanvas.height = canvasSize;
+  rawPaintCtx = rawPaintCanvas.getContext('2d');
+
+  letterMaskCanvas = document.createElement('canvas');
+  letterMaskCanvas.width = canvasSize;
+  letterMaskCanvas.height = canvasSize;
+
   traceCanvas.addEventListener('touchstart', onTraceStart, {passive: false});
   traceCanvas.addEventListener('touchmove',  onTraceMove,  {passive: false});
   traceCanvas.addEventListener('touchend',   onTraceEnd,   {passive: false});
@@ -28,29 +40,40 @@ function initTraceCanvas() {
   traceCanvas.addEventListener('mouseleave', onTraceEnd);
 }
 
-function drawGhostLetter(letter) {
+// Draws ghost letter + clipped paint to traceCtx
+function redrawTraceCanvas() {
   const S = canvasSize, fs = S * 0.76;
   traceCtx.clearRect(0, 0, S, S);
+
+  // Ghost letter
   traceCtx.save();
   traceCtx.font = `bold ${fs}px 'Fredoka One', cursive`;
   traceCtx.textAlign = 'center';
   traceCtx.textBaseline = 'middle';
   traceCtx.fillStyle = 'rgba(180,180,180,0.28)';
-  traceCtx.fillText(letter, S / 2, S / 2);
+  traceCtx.fillText(currentLetter, S / 2, S / 2);
   traceCtx.restore();
+
+  // Raw paint (unrestricted)
+  traceCtx.drawImage(rawPaintCanvas, 0, 0, S, S);
+
+  // Clip everything to letter mask — paint outside letter disappears
+  traceCtx.globalCompositeOperation = 'destination-in';
+  traceCtx.drawImage(letterMaskCanvas, 0, 0, S, S);
+  traceCtx.globalCompositeOperation = 'source-over';
 }
 
 function buildLetterPixelSet(letter) {
   const S = canvasSize, fs = S * 0.76;
-  const off = document.createElement('canvas');
-  off.width = S; off.height = S;
-  const octx = off.getContext('2d');
-  octx.font = `bold ${fs}px 'Fredoka One', cursive`;
-  octx.textAlign = 'center';
-  octx.textBaseline = 'middle';
-  octx.fillStyle = '#000';
-  octx.fillText(letter, S / 2, S / 2);
-  const data = octx.getImageData(0, 0, S, S).data;
+  // Draw opaque letter onto letterMaskCanvas (used for clipping + pixel coverage)
+  const mctx = letterMaskCanvas.getContext('2d');
+  mctx.clearRect(0, 0, S, S);
+  mctx.font = `bold ${fs}px 'Fredoka One', cursive`;
+  mctx.textAlign = 'center';
+  mctx.textBaseline = 'middle';
+  mctx.fillStyle = '#000';
+  mctx.fillText(letter, S / 2, S / 2);
+  const data = mctx.getImageData(0, 0, S, S).data;
   const set = new Set();
   for (let i = 0; i < data.length; i += 4) {
     if (data[i + 3] > 80) set.add(i >> 2);
@@ -60,11 +83,13 @@ function buildLetterPixelSet(letter) {
 
 function setupTraceLetter() {
   const letter = currentTraceWord.word[currentLetterIdx];
+  currentLetter = letter;
   coverageCount = 0; coveredSet = new Set(); letterDone = false;
   isTracing = false; lastTX = lastTY = undefined;
 
-  drawGhostLetter(letter);
+  rawPaintCtx.clearRect(0, 0, canvasSize, canvasSize);
   letterPixelSet = buildLetterPixelSet(letter);
+  redrawTraceCanvas();
 
   document.getElementById('trace-current-letter').textContent = letter;
   document.getElementById('trace-coverage-bar').style.width      = '0%';
@@ -110,19 +135,19 @@ function paintBrush(x, y) {
   const color = BRUSH_COLORS[currentLetterIdx % BRUSH_COLORS.length];
   const R = Math.round(canvasSize * 0.088);
   if (lastTX !== undefined) {
-    traceCtx.beginPath();
-    traceCtx.moveTo(lastTX, lastTY);
-    traceCtx.lineTo(x, y);
-    traceCtx.strokeStyle = color + 'B8';
-    traceCtx.lineWidth = R * 2;
-    traceCtx.lineCap = 'round';
-    traceCtx.lineJoin = 'round';
-    traceCtx.stroke();
+    rawPaintCtx.beginPath();
+    rawPaintCtx.moveTo(lastTX, lastTY);
+    rawPaintCtx.lineTo(x, y);
+    rawPaintCtx.strokeStyle = color + 'B8';
+    rawPaintCtx.lineWidth = R * 2;
+    rawPaintCtx.lineCap = 'round';
+    rawPaintCtx.lineJoin = 'round';
+    rawPaintCtx.stroke();
   } else {
-    traceCtx.beginPath();
-    traceCtx.arc(x, y, R, 0, Math.PI * 2);
-    traceCtx.fillStyle = color + 'B8';
-    traceCtx.fill();
+    rawPaintCtx.beginPath();
+    rawPaintCtx.arc(x, y, R, 0, Math.PI * 2);
+    rawPaintCtx.fillStyle = color + 'B8';
+    rawPaintCtx.fill();
   }
 }
 
@@ -160,6 +185,7 @@ function onTraceStart(e) {
   lastTX = lastTY = undefined;
   paintBrush(x, y); markCoverage(x, y);
   lastTX = x; lastTY = y;
+  redrawTraceCanvas();
 }
 function onTraceMove(e) {
   e.preventDefault();
@@ -167,6 +193,7 @@ function onTraceMove(e) {
   const {x, y} = getCanvasPos(e);
   paintBrush(x, y); markCoverage(x, y);
   lastTX = x; lastTY = y;
+  redrawTraceCanvas();
 }
 function onTraceEnd(e) { e.preventDefault(); isTracing = false; lastTX = lastTY = undefined; }
 
@@ -234,7 +261,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (letterDone) return;
     coverageCount = 0; coveredSet = new Set();
     document.getElementById('trace-coverage-bar').style.width = '0%';
-    drawGhostLetter(currentTraceWord.word[currentLetterIdx]);
+    rawPaintCtx.clearRect(0, 0, canvasSize, canvasSize);
+    redrawTraceCanvas();
   });
 
   restartTraceGame();

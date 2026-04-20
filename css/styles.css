@@ -247,50 +247,18 @@ body.number-theme header h1 { color: #9B59B6; text-shadow: 4px 4px 0 #C39BD3; }
   color: #888; margin-bottom: 16px;
 }
 #count-objects {
-  display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-  gap: 6px; min-height: 80px; padding: 8px;
+  position: relative;
+  width: 210px; height: 210px;
+  margin: 0 auto;
 }
 .count-obj {
-  font-size: clamp(1.8rem, 7vw, 2.6rem);
+  font-size: clamp(2rem, 8vw, 2.8rem);
   animation: pop 0.3s cubic-bezier(.34,1.56,.64,1) both;
   display: inline-block;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  line-height: 1;
 }
-
-/* Grouped rows for 6+ items */
-.count-row {
-  display: flex; justify-content: center; gap: 6px;
-  width: 100%;
-}
-.count-row + .count-row {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 2px dashed #e8d5f5;
-}
-
-/* Tap-to-count states */
-.count-obj.tap-pending {
-  opacity: 0.3;
-  filter: grayscale(0.6);
-  cursor: pointer;
-  transition: opacity 0.15s, transform 0.15s, filter 0.15s;
-}
-.count-obj.tap-pending:active { opacity: 0.6; transform: scale(1.15); }
-.count-obj.tapped { animation: tap-bounce 0.35s cubic-bezier(.34,1.56,.64,1); cursor: default; }
-@keyframes tap-bounce {
-  0%  { transform: scale(1); }
-  50% { transform: scale(1.45); }
-  100%{ transform: scale(1); }
-}
-
-/* Tap counter label */
-.tap-counter {
-  font-family: 'Fredoka One', cursive;
-  font-size: clamp(1rem, 4vw, 1.3rem);
-  color: #9B59B6; text-align: center;
-  margin-top: 10px; min-height: 1.8rem;
-  opacity: 0; transition: opacity 0.3s;
-}
-.tap-counter.show { opacity: 1; }
 
 /* Locked answer buttons */
 .answers-locked .num-btn {

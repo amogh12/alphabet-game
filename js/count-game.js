@@ -1,9 +1,35 @@
 const COUNT_EMOJIS = ['🍎','⭐','🌸','🦋','🐱','🍭','🎈','🐸','🌙','🍦'];
 const TOTAL_ROUNDS = 8;
-const TAP_THRESHOLD = 5;
+
+// [left%, top%] positions within the arrangement container for each count
+// Multiple layouts per count — picked randomly each round for variety
+const LAYOUTS = {
+  1: [
+    [[50, 50]]
+  ],
+  2: [
+    [[28, 50], [72, 50]],
+    [[35, 28], [65, 72]],
+    [[50, 28], [50, 72]],
+  ],
+  3: [
+    [[50, 22], [25, 72], [75, 72]],   // triangle apex-up
+    [[25, 28], [75, 28], [50, 75]],   // triangle apex-down
+    [[20, 50], [50, 50], [80, 50]],   // row
+  ],
+  4: [
+    [[28, 28], [72, 28], [28, 72], [72, 72]],   // square
+    [[50, 18], [18, 50], [82, 50], [50, 82]],   // diamond
+    [[50, 30], [20, 55], [80, 55], [50, 82]],   // kite
+  ],
+  5: [
+    [[28, 22], [72, 22], [50, 50], [28, 78], [72, 78]],   // dice 5
+    [[20, 20], [80, 20], [50, 50], [20, 80], [80, 80]],   // quincunx
+    [[50, 15], [82, 38], [68, 78], [32, 78], [18, 38]],   // pentagon
+  ]
+};
 
 let queue = [], current = null, score = 0, roundNum = 0, busy = false;
-let tappedCount = 0;
 
 function buildProgress() {
   const el = document.getElementById('progress');
@@ -16,7 +42,7 @@ function buildProgress() {
 }
 
 function buildChoices(correct) {
-  const pool = shuffle(Array.from({length: 10}, (_, i) => i + 1).filter(n => n !== correct));
+  const pool = shuffle([1, 2, 3, 4, 5].filter(n => n !== correct));
   return shuffle([correct, pool[0], pool[1], pool[2]]);
 }
 
@@ -25,7 +51,6 @@ function nextRound() {
   current = queue.shift();
   roundNum++;
   busy = false;
-  tappedCount = 0;
   buildProgress();
   document.getElementById('round').textContent = roundNum;
 
@@ -33,21 +58,7 @@ function nextRound() {
   const area = document.getElementById('count-objects');
   area.innerHTML = '';
 
-  const tapMode = current > TAP_THRESHOLD;
-
-  if (tapMode) {
-    renderGrouped(area, emoji, current);
-  } else {
-    renderSimple(area, emoji, current);
-  }
-
-  const counter = document.getElementById('tap-counter');
-  if (tapMode) {
-    counter.textContent = 'Tap each one! 👆';
-    counter.className = 'tap-counter show';
-  } else {
-    counter.className = 'tap-counter';
-  }
+  renderArranged(area, emoji, current);
 
   const answersEl = document.getElementById('answers');
   answersEl.innerHTML = '';
@@ -62,55 +73,22 @@ function nextRound() {
   });
 }
 
-function renderSimple(area, emoji, count) {
-  for (let i = 0; i < count; i++) {
+function renderArranged(area, emoji, count) {
+  const options = LAYOUTS[count];
+  const positions = options[Math.floor(Math.random() * options.length)];
+  positions.forEach((pos, i) => {
     const span = document.createElement('span');
     span.className = 'count-obj';
     span.textContent = emoji;
-    span.style.animationDelay = (i * 0.07) + 's';
+    span.style.left = pos[0] + '%';
+    span.style.top = pos[1] + '%';
+    span.style.animationDelay = (i * 0.08) + 's';
     area.appendChild(span);
-  }
-}
-
-function renderGrouped(area, emoji, count) {
-  let remaining = count, index = 0;
-  while (remaining > 0) {
-    const groupSize = Math.min(5, remaining);
-    const row = document.createElement('div');
-    row.className = 'count-row';
-    for (let i = 0; i < groupSize; i++) {
-      const span = document.createElement('span');
-      span.className = 'count-obj tap-pending';
-      span.textContent = emoji;
-      span.style.animationDelay = (index * 0.07) + 's';
-      span.addEventListener('click', handleTap);
-      row.appendChild(span);
-      index++;
-      remaining--;
-    }
-    area.appendChild(row);
-  }
-}
-
-function handleTap(e) {
-  const span = e.currentTarget;
-  if (span.classList.contains('tapped')) return;
-  span.classList.remove('tap-pending');
-  span.classList.add('tapped');
-  tappedCount++;
-
-  const counter = document.getElementById('tap-counter');
-  if (tappedCount === current) {
-    counter.textContent = '🎉 Now pick the number!';
-    document.getElementById('answers').classList.remove('answers-locked');
-  } else {
-    counter.textContent = `${tappedCount} / ${current}`;
-  }
+  });
 }
 
 function handlePick(btn, n) {
   if (busy || btn.disabled || btn.classList.contains('wrong') || btn.classList.contains('correct')) return;
-  if (document.getElementById('answers').classList.contains('answers-locked')) return;
 
   if (n === current) {
     btn.classList.add('correct');
@@ -139,6 +117,7 @@ function endGame() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  queue = shuffle(Array.from({length: 10}, (_, i) => i + 1)).slice(0, TOTAL_ROUNDS);
+  const nums = [1, 2, 3, 4, 5];
+  queue = shuffle([...nums, ...nums]).slice(0, TOTAL_ROUNDS);
   nextRound();
 });
