@@ -343,6 +343,123 @@ body.number-theme header h1 { color: #9B59B6; text-shadow: 4px 4px 0 #C39BD3; }
 }
 
 /* ════════════════════════════════
+   NEW GAME CARDS (home screen)
+   ════════════════════════════════ */
+.mode-card.sounds::before   { background: #E91E8C; }
+.mode-card.shapes::before   { background: #16A085; }
+.mode-card.patterns::before { background: #E67E22; }
+
+/* ════════════════════════════════
+   SHARED NEW GAME CARD BASE
+   ════════════════════════════════ */
+#sound-card, #shape-card, #pattern-card {
+  background: white; border-radius: 28px; padding: 20px 20px 16px;
+  text-align: center; box-shadow: 0 8px 0 #E0D5C8;
+  margin-bottom: 16px; position: relative; overflow: hidden;
+}
+#sound-card::before, #shape-card::before, #pattern-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+}
+#sound-card::before   { background: linear-gradient(90deg, #E91E8C, #FFB347, #FF6B6B); }
+#shape-card::before   { background: linear-gradient(90deg, #16A085, #2E86C1, #9B59B6); }
+#pattern-card::before { background: linear-gradient(90deg, #E67E22, #F4D03F, #28B463); }
+
+/* ════════════════════════════════
+   SOUNDS GAME
+   ════════════════════════════════ */
+body.sounds-theme {
+  background-image:
+    radial-gradient(circle at 20% 20%, #FFD6EF 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, #FFE5B4 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, #F8D7F0 0%, transparent 60%);
+}
+body.sounds-theme header h1 { color: #E91E8C; text-shadow: 4px 4px 0 #FFB347; }
+
+#play-sound-btn {
+  display: block; margin: 4px auto 12px;
+  width: 96px; height: 96px; border-radius: 50%;
+  border: none; background: #FFE8F8;
+  font-size: 3rem; cursor: pointer;
+  box-shadow: 0 6px 0 #e8a0d0;
+  transition: transform 0.12s, box-shadow 0.12s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+#play-sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #e8a0d0; }
+#play-sound-btn.sound-pop { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1); }
+
+.sound-letter-btn { min-height: 90px; justify-content: center; }
+.sound-big-letter {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(3rem, 13vw, 5rem);
+  line-height: 1;
+}
+
+/* ════════════════════════════════
+   SHAPES GAME
+   ════════════════════════════════ */
+body.shapes-theme {
+  background-image:
+    radial-gradient(circle at 15% 25%, #C8F7E8 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, #D6EAF8 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, #E8F8F5 0%, transparent 60%);
+}
+body.shapes-theme header h1 { color: #16A085; text-shadow: 4px 4px 0 #2E86C1; }
+
+#shape-display {
+  display: flex; justify-content: center; align-items: center;
+  min-height: 130px; margin: 8px 0 4px;
+}
+#shape-card-text { font-size: 1.15rem; font-weight: 700; color: #555; margin-bottom: 4px; }
+
+.shape-answer-btn { min-height: 100px; gap: 8px; }
+.shape-btn-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1rem, 3.5vw, 1.3rem); color: #444;
+}
+
+/* ════════════════════════════════
+   PATTERNS GAME
+   ════════════════════════════════ */
+body.patterns-theme {
+  background-image:
+    radial-gradient(circle at 10% 30%, #FFF5D5 0%, transparent 40%),
+    radial-gradient(circle at 90% 70%, #D5F5E3 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, #FEF9E7 0%, transparent 60%);
+}
+body.patterns-theme header h1 { color: #E67E22; text-shadow: 4px 4px 0 #F4D03F; }
+
+#pattern-display {
+  display: flex; justify-content: center; align-items: center;
+  gap: clamp(5px, 2vw, 10px); flex-wrap: wrap;
+  padding: 10px 4px;
+}
+.pat-item {
+  width: clamp(42px, 11vw, 56px); height: clamp(42px, 11vw, 56px);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  animation: pop 0.3s cubic-bezier(.34,1.56,.64,1) both;
+  flex-shrink: 0;
+}
+.pat-item.square { border-radius: 10px; }
+.pat-blank {
+  background: #FFF5D5; border: 4px dashed #FFB347; color: #FFB347;
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.2rem, 5vw, 1.8rem);
+  border-radius: 50%;
+  animation: pulse-hint 1.2s ease infinite;
+}
+
+.pattern-answer-btn { min-height: 90px; gap: 6px; }
+.pat-answer-shape {
+  width: clamp(42px, 11vw, 54px); height: clamp(42px, 11vw, 54px);
+  border-radius: 50%; flex-shrink: 0;
+}
+.pat-answer-shape.square { border-radius: 10px; }
+.pat-btn-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(0.85rem, 3vw, 1.1rem); color: #444;
+}
+
+/* ════════════════════════════════
    TRACE GAME
    ════════════════════════════════ */
 #trace-inner {
