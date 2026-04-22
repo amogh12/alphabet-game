@@ -1,19 +1,17 @@
 const ROUNDS = 8;
 let queue = [], current = null, score = 0, roundNum = 0, wrongCount = 0;
 
-const PHONEMES = {
-  A:'aah', B:'buh', C:'kuh', D:'duh', E:'eh',  F:'fuh', G:'guh',
-  H:'huh', I:'ih',  J:'juh', K:'kuh', L:'luh', M:'mmm', N:'nnn',
-  O:'oh',  P:'puh', Q:'kwuh',R:'rrr', S:'sss', T:'tuh', U:'uh',
-  V:'vvv', W:'wuh', X:'ksss',Y:'yuh', Z:'zzz',
-};
-
-function saySound(letter) {
+function saySound(letter, word) {
   if (!soundEnabled || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(PHONEMES[letter] || letter);
-  u.rate = 0.65; u.pitch = 1.2; u.volume = 1;
-  window.speechSynthesis.speak(u);
+  const letterUtt = new SpeechSynthesisUtterance(letter);
+  letterUtt.rate = 0.7; letterUtt.pitch = 1.2; letterUtt.volume = 1;
+  if (word) {
+    const wordUtt = new SpeechSynthesisUtterance(word);
+    wordUtt.rate = 0.75; wordUtt.pitch = 1.2; wordUtt.volume = 1;
+    letterUtt.onend = () => window.speechSynthesis.speak(wordUtt);
+  }
+  window.speechSynthesis.speak(letterUtt);
 }
 
 function buildProgress() {
@@ -36,7 +34,7 @@ function nextQuestion() {
 
   const sb = document.getElementById('play-sound-btn');
   sb.classList.remove('sound-pop'); void sb.offsetWidth; sb.classList.add('sound-pop');
-  setTimeout(() => saySound(current.letter), 300);
+  setTimeout(() => saySound(current.letter, current.word), 300);
 
   const pool = ITEMS.filter(i => i.letter !== current.letter);
   shuffle(pool);
@@ -118,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hint-btn').addEventListener('click', () => { activateHint(); playSound('hint'); });
   document.getElementById('play-sound-btn').addEventListener('click', () => {
     if (!current) return;
-    saySound(current.letter);
+    saySound(current.letter, current.word);
     const sb = document.getElementById('play-sound-btn');
     sb.classList.remove('sound-pop'); void sb.offsetWidth; sb.classList.add('sound-pop');
   });
