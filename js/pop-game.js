@@ -15,12 +15,27 @@ const SLOTS = [
   { top: 72, left: 60 },
 ];
 
-function sayNumber(n) {
+// Say the number twice with a pause in between, like the ABC game does for letters
+function sayNumberTwice(n) {
   if (!soundEnabled || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(String(n));
-  u.rate = 0.9; u.pitch = 1.3; u.volume = 1;
-  window.speechSynthesis.speak(u);
+
+  const speak = () => {
+    const u = new SpeechSynthesisUtterance(String(n));
+    u.rate = 0.85; u.pitch = 1.3; u.volume = 1;
+    return u;
+  };
+
+  const u1 = speak();
+  // After first utterance ends, pause 700ms then say it again
+  u1.onend = () => setTimeout(() => window.speechSynthesis.speak(speak()), 700);
+  window.speechSynthesis.speak(u1);
+}
+
+function animateSoundBtn() {
+  const btn = document.getElementById('pop-sound-btn');
+  if (!btn) return;
+  btn.classList.remove('sound-pop'); void btn.offsetWidth; btn.classList.add('sound-pop');
 }
 
 function buildProgress() {
@@ -41,13 +56,9 @@ function nextQuestion() {
   current = queue[roundNum];
   document.getElementById('round').textContent = roundNum + 1;
 
-  // Show target number
-  const tEl = document.getElementById('pop-target');
-  tEl.textContent = current.target;
-  tEl.style.color = COLORS[roundNum % COLORS.length];
-  tEl.classList.remove('pop'); void tEl.offsetWidth; tEl.classList.add('pop');
-
-  setTimeout(() => sayNumber(current.target), 300);
+  // Animate the sound button and say the number twice
+  animateSoundBtn();
+  sayNumberTwice(current.target);
 
   // Render bubbles in shuffled slots with slight random offset
   const area = document.getElementById('pop-play-area');
@@ -122,7 +133,8 @@ function hideHint() {
   document.querySelectorAll('.pop-bubble.hint-glow').forEach(b => b.classList.remove('hint-glow'));
 }
 function activateHint() {
-  playSound('hint'); sayNumber(current.target);
+  playSound('hint');
+  animateSoundBtn(); sayNumberTwice(current.target);
   document.querySelectorAll('.pop-bubble').forEach(btn => {
     if (!btn.disabled && Number(btn.dataset.num) === current.target)
       btn.classList.add('hint-glow');
@@ -147,6 +159,9 @@ function restartGame() {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hint-btn').addEventListener('click', () => { activateHint(); playSound('hint'); });
-  document.getElementById('pop-target').addEventListener('click', () => { if (current) sayNumber(current.target); });
+  document.getElementById('pop-sound-btn').addEventListener('click', () => {
+    if (!current) return;
+    animateSoundBtn(); sayNumberTwice(current.target);
+  });
   restartGame();
 });

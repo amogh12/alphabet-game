@@ -285,14 +285,18 @@ body.pop-theme header h1 { color: #FF8C42; text-shadow: 4px 4px 0 #FFB347; }
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
   background: linear-gradient(90deg, #FF6B6B, #FF8C42, #F4D03F, #28B463);
 }
-#pop-question { font-family: 'Fredoka One', cursive; font-size: clamp(1rem, 4vw, 1.3rem); color: #888; margin-bottom: 2px; }
-#pop-target {
-  font-family: 'Fredoka One', cursive;
-  font-size: clamp(4rem, 16vw, 7rem); line-height: 1.05;
-  cursor: pointer; display: inline-block;
-  user-select: none; -webkit-tap-highlight-color: transparent;
+#pop-question { font-family: 'Fredoka One', cursive; font-size: clamp(1rem, 4vw, 1.3rem); color: #888; margin-bottom: 10px; }
+#pop-sound-btn {
+  display: block; margin: 0 auto 4px;
+  width: 88px; height: 88px; border-radius: 50%;
+  border: none; background: #FFF0D5;
+  font-size: 2.8rem; cursor: pointer;
+  box-shadow: 0 6px 0 #e8b86a;
+  transition: transform 0.12s, box-shadow 0.12s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
-#pop-target:active { transform: scale(0.9); }
+#pop-sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #e8b86a; }
+#pop-sound-btn.sound-pop { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1); }
 
 #pop-play-area {
   position: relative; width: 100%; max-width: 380px;
