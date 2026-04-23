@@ -61,13 +61,14 @@ function nextRound() {
   });
 }
 
-// Queues all numbers as separate utterances (browser speaks them in order),
-// and highlights each tile with fixed timing — no onend dependency.
+// Called synchronously inside the click handler so the browser keeps the
+// user-gesture context for speechSynthesis. Highlights tiles with fixed
+// timing; onDone fires after the last number's slot.
 function saySequence(nums, onDone) {
-  const tiles = Array.from(document.querySelectorAll('#sequence-display .seq-num'));
-  const STEP = 800; // ms per number
+  const STEP  = 850;  // ms between each spoken number
+  const DELAY = 500;  // wait for the correct chime to finish first
 
-  // Queue every number as its own utterance so the browser reads them in order
+  // Queue all utterances immediately — must stay inside the user-gesture call stack
   if (soundEnabled && window.speechSynthesis) {
     window.speechSynthesis.cancel();
     nums.forEach(num => {
@@ -77,19 +78,20 @@ function saySequence(nums, onDone) {
     });
   }
 
-  // Highlight tiles with fixed timing, independent of speech callbacks
-  tiles.forEach((tile, idx) => {
+  // Stagger tile highlights (start after the chime, then one per STEP)
+  const tiles = Array.from(document.querySelectorAll('#sequence-display .seq-num'));
+  nums.forEach((_, idx) => {
     setTimeout(() => {
       tiles.forEach(t => t.classList.remove('seq-highlight'));
-      tile.classList.add('seq-highlight');
-    }, idx * STEP);
+      if (tiles[idx]) tiles[idx].classList.add('seq-highlight');
+    }, DELAY + idx * STEP);
   });
 
-  // After all numbers: clear highlights → success overlay
+  // Clear highlights then call onDone
   setTimeout(() => {
     tiles.forEach(t => t.classList.remove('seq-highlight'));
     onDone();
-  }, nums.length * STEP + 300);
+  }, DELAY + nums.length * STEP + 200);
 }
 
 function handlePick(btn, n) {
@@ -106,12 +108,11 @@ function handlePick(btn, n) {
     playSound('correct');
     spawnConfetti();
     const p = PRAISE[Math.floor(Math.random() * PRAISE.length)];
-    // Short pause so the correct-sound finishes, then read the full sequence
-    setTimeout(() => {
-      saySequence(current.nums, () => {
-        showFeedbackOverlay(p[0], p[1], `${current.answer} fits perfectly! ` + p[2], '#2E86C1', 1600, nextRound);
-      });
-    }, 400);
+    // saySequence is called here — NOT inside setTimeout — so speech synthesis
+    // keeps the user-gesture context the browser requires.
+    saySequence(current.nums, () => {
+      showFeedbackOverlay(p[0], p[1], `${current.answer} fits perfectly! ` + p[2], '#2E86C1', 1600, nextRound);
+    });
   } else {
     btn.classList.add('wrong');
     btn.disabled = true;
