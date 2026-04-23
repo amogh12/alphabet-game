@@ -65,9 +65,8 @@ function nextRound() {
 // speechSynthesis.speak() keeps the browser's user-gesture context.
 // Highlights each tile in turn, then fires onDone when the last one clears.
 function saySequence(nums, onDone) {
-  const STEP = 750; // ms per number
+  const STEP = 750;
 
-  // Queue every number as its own utterance — browser plays them in order
   if (soundEnabled && window.speechSynthesis) {
     window.speechSynthesis.cancel();
     nums.forEach(num => {
@@ -77,7 +76,6 @@ function saySequence(nums, onDone) {
     });
   }
 
-  // Highlight each tile in sync with the fixed STEP timing
   const tiles = Array.from(document.querySelectorAll('#sequence-display .seq-num'));
   nums.forEach((_, idx) => {
     setTimeout(() => {
@@ -86,7 +84,6 @@ function saySequence(nums, onDone) {
     }, idx * STEP);
   });
 
-  // All done — clear highlights and call onDone
   setTimeout(() => {
     tiles.forEach(t => t.classList.remove('seq-highlight'));
     onDone();
