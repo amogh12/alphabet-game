@@ -71,7 +71,7 @@ function saySequence(nums, onDone) {
     // Single utterance = no inter-number gaps from the browser's speech queue
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(nums.join(', '));
-    u.rate = 1.3; u.pitch = 1.3; u.volume = 1;
+    u.rate = 1.8; u.pitch = 1.3; u.volume = 1;
     window.speechSynthesis.speak(u);
   }
 
