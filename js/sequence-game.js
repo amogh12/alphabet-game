@@ -65,15 +65,14 @@ function nextRound() {
 // speechSynthesis.speak() keeps the browser's user-gesture context.
 // Highlights each tile in turn, then fires onDone when the last one clears.
 function saySequence(nums, onDone) {
-  const STEP = 380;
+  const STEP = 400;
 
   if (soundEnabled && window.speechSynthesis) {
+    // Single utterance = no inter-number gaps from the browser's speech queue
     window.speechSynthesis.cancel();
-    nums.forEach(num => {
-      const u = new SpeechSynthesisUtterance(String(num));
-      u.rate = 1.4; u.pitch = 1.3; u.volume = 1;
-      window.speechSynthesis.speak(u);
-    });
+    const u = new SpeechSynthesisUtterance(nums.join(', '));
+    u.rate = 1.3; u.pitch = 1.3; u.volume = 1;
+    window.speechSynthesis.speak(u);
   }
 
   const tiles = Array.from(document.querySelectorAll('#sequence-display .seq-num'));
