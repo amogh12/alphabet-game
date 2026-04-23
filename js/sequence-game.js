@@ -61,14 +61,13 @@ function nextRound() {
   });
 }
 
-// Called synchronously inside the click handler so the browser keeps the
-// user-gesture context for speechSynthesis. Highlights tiles with fixed
-// timing; onDone fires after the last number's slot.
+// Called directly inside the click handler (no setTimeout wrapper) so
+// speechSynthesis.speak() keeps the browser's user-gesture context.
+// Highlights each tile in turn, then fires onDone when the last one clears.
 function saySequence(nums, onDone) {
-  const STEP  = 850;  // ms between each spoken number
-  const DELAY = 500;  // wait for the correct chime to finish first
+  const STEP = 750; // ms per number
 
-  // Queue all utterances immediately — must stay inside the user-gesture call stack
+  // Queue every number as its own utterance — browser plays them in order
   if (soundEnabled && window.speechSynthesis) {
     window.speechSynthesis.cancel();
     nums.forEach(num => {
@@ -78,20 +77,20 @@ function saySequence(nums, onDone) {
     });
   }
 
-  // Stagger tile highlights (start after the chime, then one per STEP)
+  // Highlight each tile in sync with the fixed STEP timing
   const tiles = Array.from(document.querySelectorAll('#sequence-display .seq-num'));
   nums.forEach((_, idx) => {
     setTimeout(() => {
       tiles.forEach(t => t.classList.remove('seq-highlight'));
       if (tiles[idx]) tiles[idx].classList.add('seq-highlight');
-    }, DELAY + idx * STEP);
+    }, idx * STEP);
   });
 
-  // Clear highlights then call onDone
+  // All done — clear highlights and call onDone
   setTimeout(() => {
     tiles.forEach(t => t.classList.remove('seq-highlight'));
     onDone();
-  }, DELAY + nums.length * STEP + 200);
+  }, nums.length * STEP + 200);
 }
 
 function handlePick(btn, n) {
@@ -100,17 +99,19 @@ function handlePick(btn, n) {
   const blank = document.querySelector('.seq-blank');
 
   if (n === current.answer) {
+    // 1. Fill the blank and mark button correct immediately
     if (blank) { blank.classList.remove('seq-blank'); blank.classList.add('seq-num'); blank.textContent = n; }
     btn.classList.add('correct');
     document.querySelectorAll('.num-btn').forEach(b => b.disabled = true);
     score++;
     document.getElementById('score').textContent = score;
-    playSound('correct');
-    spawnConfetti();
+
+    // 2. Read the sequence aloud right now (must stay in click-handler call stack)
     const p = PRAISE[Math.floor(Math.random() * PRAISE.length)];
-    // saySequence is called here — NOT inside setTimeout — so speech synthesis
-    // keeps the user-gesture context the browser requires.
     saySequence(current.nums, () => {
+      // 3. Sequence done → celebrate, then show overlay → next round
+      playSound('correct');
+      spawnConfetti();
       showFeedbackOverlay(p[0], p[1], `${current.answer} fits perfectly! ` + p[2], '#2E86C1', 1600, nextRound);
     });
   } else {
