@@ -61,35 +61,35 @@ function nextRound() {
   });
 }
 
-// Speaks each number one at a time, highlights its tile, then calls onDone.
+// Queues all numbers as separate utterances (browser speaks them in order),
+// and highlights each tile with fixed timing — no onend dependency.
 function saySequence(nums, onDone) {
   const tiles = Array.from(document.querySelectorAll('#sequence-display .seq-num'));
+  const STEP = 800; // ms per number
 
-  function clearHighlight() { tiles.forEach(t => t.classList.remove('seq-highlight')); }
-
-  function speakAt(idx) {
-    if (idx >= nums.length) {
-      clearHighlight();
-      setTimeout(onDone, 300);
-      return;
-    }
-    // Light up the matching tile
-    clearHighlight();
-    if (tiles[idx]) tiles[idx].classList.add('seq-highlight');
-
-    if (!soundEnabled || !window.speechSynthesis) {
-      setTimeout(() => speakAt(idx + 1), 600);
-      return;
-    }
+  // Queue every number as its own utterance so the browser reads them in order
+  if (soundEnabled && window.speechSynthesis) {
     window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(String(nums[idx]));
-    u.rate = 0.8; u.pitch = 1.2; u.volume = 1;
-    u.onend  = () => setTimeout(() => speakAt(idx + 1), 200);
-    u.onerror = () => setTimeout(() => speakAt(idx + 1), 600);
-    window.speechSynthesis.speak(u);
+    nums.forEach(num => {
+      const u = new SpeechSynthesisUtterance(String(num));
+      u.rate = 0.85; u.pitch = 1.3; u.volume = 1;
+      window.speechSynthesis.speak(u);
+    });
   }
 
-  speakAt(0);
+  // Highlight tiles with fixed timing, independent of speech callbacks
+  tiles.forEach((tile, idx) => {
+    setTimeout(() => {
+      tiles.forEach(t => t.classList.remove('seq-highlight'));
+      tile.classList.add('seq-highlight');
+    }, idx * STEP);
+  });
+
+  // After all numbers: clear highlights → success overlay
+  setTimeout(() => {
+    tiles.forEach(t => t.classList.remove('seq-highlight'));
+    onDone();
+  }, nums.length * STEP + 300);
 }
 
 function handlePick(btn, n) {
