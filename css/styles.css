@@ -266,6 +266,74 @@ body.number-theme header h1 { color: #9B59B6; text-shadow: 4px 4px 0 #C39BD3; }
 }
 
 /* ════════════════════════════════
+   MORE OR LESS GAME
+   ════════════════════════════════ */
+body.more-theme {
+  background-image:
+    radial-gradient(circle at 15% 20%, #E8DAFF 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, #C8F7E8 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, #FFF5D5 0%, transparent 60%);
+}
+body.more-theme header h1 { color: #8E44AD; text-shadow: 4px 4px 0 #C39BD3; }
+
+#more-card {
+  background: white; border-radius: 28px; padding: 14px 20px 12px;
+  text-align: center; box-shadow: 0 8px 0 #E0D5C8;
+  margin-bottom: 12px; position: relative; overflow: hidden;
+}
+#more-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: linear-gradient(90deg, #8E44AD, #2E86C1, #16A085);
+}
+#more-question { font-family: 'Fredoka One', cursive; font-size: clamp(1rem, 4vw, 1.3rem); color: #888; margin-bottom: 8px; }
+#more-sound-btn {
+  display: block; margin: 0 auto 2px;
+  width: 80px; height: 80px; border-radius: 50%;
+  border: none; background: #F0E6FF;
+  font-size: 2.5rem; cursor: pointer;
+  box-shadow: 0 6px 0 #c39bd3;
+  transition: transform 0.12s, box-shadow 0.12s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+#more-sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #c39bd3; }
+#more-sound-btn.sound-pop { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1); }
+
+#more-arena {
+  display: flex; align-items: stretch; gap: 10px;
+  max-width: 520px; margin: 0 auto 8px;
+}
+.side-btn {
+  flex: 1; min-height: 190px;
+  background: white; border: 4px solid #eee; border-radius: 24px;
+  box-shadow: 0 7px 0 #ddd; cursor: pointer; padding: 10px 6px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent; outline: none;
+  transition: transform 0.12s, box-shadow 0.12s, border-color 0.2s, background 0.2s;
+  position: relative; overflow: hidden;
+}
+.side-btn:not(:disabled):active { transform: translateY(4px); box-shadow: 0 3px 0 #ddd; }
+.side-btn.correct { background: #C8F7C5; border-color: #5CB85C; box-shadow: 0 7px 0 #4a9b4a; animation: wiggle 0.5s ease; }
+.side-btn.wrong   { background: #FFE8E8; border-color: #E74C3C; box-shadow: 0 7px 0 #b03a2e; animation: shake 0.35s ease; opacity: 0.55; }
+.side-btn.hint-glow { border-color: #FFB347; box-shadow: 0 7px 0 #e8960a; animation: pulse-hint 0.8s ease infinite; }
+
+.side-objects {
+  display: flex; flex-wrap: wrap;
+  justify-content: center; align-content: center; align-items: center;
+  gap: 5px; width: 100%;
+}
+.side-obj {
+  font-size: clamp(1.6rem, 7vw, 2.2rem); line-height: 1;
+  animation: pop 0.25s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+.more-vs {
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka One', cursive; font-size: 1.1rem;
+  color: #ccc; flex-shrink: 0; padding-top: 8px;
+}
+.mode-card.more::before { background: #8E44AD; }
+
+/* ════════════════════════════════
    POP THE NUMBER GAME
    ════════════════════════════════ */
 body.pop-theme {
