@@ -61,6 +61,34 @@ function nextRound() {
   });
 }
 
+// Reads the full number sequence aloud, highlights each tile in turn, then calls onDone.
+function saySequence(nums, onDone) {
+  const tiles = Array.from(document.querySelectorAll('#sequence-display .seq-num'));
+  const PER_NUM_MS = 700; // rough ms per number at the chosen speech rate
+
+  // Stagger-highlight each tile as the voice reaches it
+  tiles.forEach((tile, i) => {
+    setTimeout(() => {
+      tiles.forEach(t => t.classList.remove('seq-highlight'));
+      tile.classList.add('seq-highlight');
+    }, i * PER_NUM_MS);
+  });
+  // Remove highlight after last tile
+  setTimeout(() => tiles.forEach(t => t.classList.remove('seq-highlight')),
+    tiles.length * PER_NUM_MS + 300);
+
+  if (!soundEnabled || !window.speechSynthesis) {
+    setTimeout(onDone, tiles.length * PER_NUM_MS + 400);
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(nums.join(' ... '));
+  u.rate = 0.65; u.pitch = 1.2; u.volume = 1;
+  u.onend  = () => setTimeout(onDone, 250);
+  u.onerror = () => setTimeout(onDone, 250);
+  window.speechSynthesis.speak(u);
+}
+
 function handlePick(btn, n) {
   if (btn.disabled || btn.classList.contains('wrong') || btn.classList.contains('correct')) return;
 
@@ -75,9 +103,12 @@ function handlePick(btn, n) {
     playSound('correct');
     spawnConfetti();
     const p = PRAISE[Math.floor(Math.random() * PRAISE.length)];
+    // Short pause so the correct-sound finishes, then read the full sequence
     setTimeout(() => {
-      showFeedbackOverlay(p[0], p[1], `${current.answer} fits perfectly! ` + p[2], '#2E86C1', 1600, nextRound);
-    }, 300);
+      saySequence(current.nums, () => {
+        showFeedbackOverlay(p[0], p[1], `${current.answer} fits perfectly! ` + p[2], '#2E86C1', 1600, nextRound);
+      });
+    }, 400);
   } else {
     btn.classList.add('wrong');
     btn.disabled = true;

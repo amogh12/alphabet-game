@@ -332,7 +332,8 @@ body.number-theme header h1 { color: #9B59B6; text-shadow: 4px 4px 0 #C39BD3; }
   width: clamp(52px, 13vw, 68px); height: clamp(52px, 13vw, 68px);
   border-radius: 14px; display: flex; align-items: center; justify-content: center;
 }
-.seq-num  { background: #F4F6F7; border: 3px solid #ddd; color: #444; box-shadow: 0 4px 0 #ddd; }
+.seq-num  { background: #F4F6F7; border: 3px solid #ddd; color: #444; box-shadow: 0 4px 0 #ddd; transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+.seq-num.seq-highlight { background: #AED6F1; border-color: #2E86C1; transform: scale(1.18); box-shadow: 0 4px 0 #1a6fa0; }
 .seq-blank {
   background: #FFF5D5; border: 4px dashed #FFB347; color: #FFB347;
   animation: pulse-hint 1.2s ease infinite;
