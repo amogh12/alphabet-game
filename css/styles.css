@@ -479,9 +479,10 @@ body.pop-theme header h1 { color: #FF8C42; text-shadow: 4px 4px 0 #FFB347; }
 /* ════════════════════════════════
    NEW GAME CARDS (home screen)
    ════════════════════════════════ */
-.mode-card.sounds::before   { background: #E91E8C; }
-.mode-card.shapes::before   { background: #16A085; }
-.mode-card.patterns::before { background: #E67E22; }
+.mode-card.sounds::before    { background: #E91E8C; }
+.mode-card.shapes::before    { background: #16A085; }
+.mode-card.patterns::before  { background: #E67E22; }
+.mode-card.emotions::before  { background: #FF6B9D; }
 
 /* ════════════════════════════════
    SHARED NEW GAME CARD BASE
@@ -636,3 +637,66 @@ body.patterns-theme header h1 { color: #E67E22; text-shadow: 4px 4px 0 #F4D03F; 
   touch-action:manipulation; -webkit-tap-highlight-color:transparent;
 }
 #trace-clear-btn:active { transform:translateY(3px); box-shadow:0 1px 0 #ddd; }
+
+/* ════════════════════════════════
+   EMOTIONS GAME
+   ════════════════════════════════ */
+body.emotions-theme {
+  background-image:
+    radial-gradient(circle at 15% 20%, #FFD6E8 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, #FFF5B4 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, #FFE8F5 0%, transparent 60%);
+}
+body.emotions-theme header h1 { color: #FF6B9D; text-shadow: 4px 4px 0 #FFB347; }
+
+#emotion-card {
+  background: white; border-radius: 28px; padding: 14px 20px 12px;
+  text-align: center; box-shadow: 0 8px 0 #E0D5C8;
+  margin-bottom: 14px; position: relative; overflow: hidden;
+}
+#emotion-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: linear-gradient(90deg, #FF6B9D, #FFB347, #FF6B6B, #C39BD3);
+}
+#emotion-question {
+  font-family: 'Fredoka One', cursive; font-size: clamp(1rem, 4vw, 1.3rem);
+  color: #888; margin-bottom: 10px;
+}
+#emotion-sound-btn {
+  display: block; margin: 0 auto 2px;
+  width: 88px; height: 88px; border-radius: 50%;
+  border: none; background: #FFE8F5;
+  font-size: 2.8rem; cursor: pointer;
+  box-shadow: 0 6px 0 #e8a0c8;
+  transition: transform 0.12s, box-shadow 0.12s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+#emotion-sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #e8a0c8; }
+#emotion-sound-btn.sound-pop { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1); }
+
+#emotion-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-bottom: 10px;
+}
+.emotion-btn {
+  background: white; border: 4px solid transparent; border-radius: 24px;
+  padding: 10px; cursor: pointer; text-align: center;
+  box-shadow: 0 7px 0 #ddd;
+  transition: transform 0.12s, box-shadow 0.12s, background 0.2s, border-color 0.2s;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 110px;
+  -webkit-tap-highlight-color: transparent; outline: none;
+  touch-action: manipulation;
+}
+.emotion-btn:not(:disabled):active { transform: translateY(4px); box-shadow: 0 3px 0 #ddd; }
+.emotion-btn:disabled { cursor: default; }
+.emotion-face {
+  font-size: clamp(3.5rem, 14vw, 5.5rem);
+  line-height: 1;
+  display: block;
+  transition: transform 0.3s;
+}
+.emotion-btn.correct { background: #C8F7C5; border-color: #5CB85C; box-shadow: 0 7px 0 #4a9b4a; animation: wiggle 0.5s ease; }
+.emotion-btn.correct .emotion-face { animation: big-bounce 0.6s cubic-bezier(.34,1.56,.64,1); }
+.emotion-btn.wrong   { background: #FFE8E8; border-color: #E74C3C; box-shadow: 0 7px 0 #b03a2e; animation: shake 0.35s ease; opacity: 0.5; }
+.emotion-btn.hint-glow { border-color: #FFB347; box-shadow: 0 7px 0 #e8960a; animation: pulse-hint 0.8s ease infinite; }
