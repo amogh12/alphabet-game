@@ -399,6 +399,81 @@ body.pop-theme header h1 { color: #FF8C42; text-shadow: 4px 4px 0 #FFB347; }
 .mode-card.pop::before { background: #FF8C42; }
 
 /* ════════════════════════════════
+   FIRST LETTER GAME
+   ════════════════════════════════ */
+body.first-theme {
+  background-image:
+    radial-gradient(circle at 20% 15%, #FFF8E1 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, #FFF3E0 0%, transparent 35%),
+    radial-gradient(circle at 50% 80%, #FFFDE7 0%, transparent 50%);
+}
+body.first-theme header h1 { color: #F39C12; text-shadow: 4px 4px 0 #F8C471; }
+
+#first-card {
+  background: white; border-radius: 28px; padding: 14px 20px 16px;
+  text-align: center; box-shadow: 0 8px 0 #E0D5C8;
+  margin-bottom: 16px; position: relative; overflow: hidden;
+}
+#first-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: linear-gradient(90deg, #F39C12, #F4D03F, #28B463, #2E86C1, #9B59B6);
+}
+#first-prompt {
+  font-family: 'Fredoka One', cursive; font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+  color: #888; margin-bottom: 8px;
+}
+#first-sound-btn {
+  display: block; margin: 0 auto 10px;
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, #F39C12, #F8C471);
+  box-shadow: 0 6px 0 #D68910;
+  border: none; font-size: 1.8rem; cursor: pointer;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+#first-sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #D68910; }
+#first-sound-btn.sound-pop { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1); }
+
+#first-emoji {
+  font-size: clamp(4rem, 18vw, 6rem); line-height: 1;
+  margin-bottom: 8px; display: block;
+}
+#first-emoji.pop { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1); }
+
+#first-word {
+  font-family: 'Fredoka One', cursive; font-size: clamp(1.6rem, 7vw, 2.4rem);
+  color: #555; letter-spacing: 2px;
+}
+.word-first-letter {
+  color: #F39C12; font-size: 1.3em; display: inline-block;
+  animation: big-bounce 0.6s ease;
+}
+.word-rest { color: #888; }
+
+#first-answers {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; max-width: 340px; margin: 0 auto 8px;
+}
+.first-letter-btn {
+  font-family: 'Fredoka One', cursive; font-size: clamp(2.2rem, 10vw, 3.2rem);
+  width: 100%; aspect-ratio: 1;
+  border-radius: 20px; border: 3px solid #eee;
+  cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s, opacity 0.2s;
+  animation: pop 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+.first-letter-btn:not(:disabled):active { transform: translateY(4px); }
+.first-letter-btn.correct {
+  background: #C8F7C5 !important; border-color: #5CB85C !important;
+  box-shadow: 0 6px 0 #4a9b4a !important; animation: wiggle 0.4s ease;
+}
+.first-letter-btn.wrong   { opacity: 0.35; animation: shake 0.35s ease; }
+.first-letter-btn.hint-glow {
+  box-shadow: 0 0 0 5px #FFB347, 0 6px 0 rgba(0,0,0,0.15) !important;
+  animation: pulse-hint 0.8s ease infinite !important;
+}
+.mode-card.first::before { background: #F39C12; }
+
+/* ════════════════════════════════
    COLOR POP GAME
    ════════════════════════════════ */
 body.colors-theme {

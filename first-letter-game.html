@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FFF9F0">
+<title>First Letter – ABC Fun!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="first-theme">
+
+<button id="sound-toggle" aria-label="Toggle sound">🔊</button>
+<a id="back-btn" href="index.html">← Home</a>
+
+<header>
+  <h1>🔡 First Letter!</h1>
+  <p>What letter does the word start with?</p>
+</header>
+
+<div id="scorebar">
+  <div class="score-pill">⭐ <span id="score">0</span></div>
+  <div class="score-pill">🎯 Round <span id="round">1</span></div>
+</div>
+
+<div id="game">
+  <div id="progress" class="dots-row"></div>
+  <div id="first-card">
+    <div id="first-prompt">What letter does this start with?</div>
+    <button id="first-sound-btn" aria-label="Say the word">🔊</button>
+    <div id="first-emoji"></div>
+    <div id="first-word"></div>
+  </div>
+  <div id="first-answers"></div>
+  <div id="try-again-msg"></div>
+  <div id="hint-area"><button id="hint-btn">💡 Hint</button></div>
+</div>
+
+<div id="feedback" role="dialog" aria-modal="true">
+  <div class="fb-emoji" id="fb-emoji">🎉</div>
+  <div class="fb-msg"   id="fb-msg">Yay!</div>
+  <div class="fb-sub"   id="fb-sub"></div>
+</div>
+
+<script src="js/shared.js"></script>
+<script src="js/first-letter-game.js"></script>
+</body>
+</html>
