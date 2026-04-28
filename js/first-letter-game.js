@@ -51,9 +51,6 @@ function nextQuestion() {
   emojiEl.textContent = current.emoji;
   emojiEl.classList.remove('pop'); void emojiEl.offsetWidth; emojiEl.classList.add('pop');
 
-  // Show word with first letter highlighted
-  const wordEl = document.getElementById('first-word');
-  wordEl.innerHTML = `<span class="word-first-letter">${current.word[0]}</span><span class="word-rest">${current.word.slice(1)}</span>`;
 
   // Say the word twice
   animateSoundBtn();
