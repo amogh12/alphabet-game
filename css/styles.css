@@ -399,6 +399,59 @@ body.pop-theme header h1 { color: #FF8C42; text-shadow: 4px 4px 0 #FFB347; }
 .mode-card.pop::before { background: #FF8C42; }
 
 /* ════════════════════════════════
+   COLOR POP GAME
+   ════════════════════════════════ */
+body.colors-theme {
+  background-image:
+    radial-gradient(circle at 15% 20%, #FFE5EC 0%, transparent 35%),
+    radial-gradient(circle at 85% 15%, #E5F0FF 0%, transparent 35%),
+    radial-gradient(circle at 50% 80%, #E8F8E8 0%, transparent 45%);
+}
+body.colors-theme header h1 { color: #9B59B6; text-shadow: 4px 4px 0 #C39BD3; }
+
+#color-card {
+  background: white; border-radius: 28px; padding: 14px 20px 12px;
+  text-align: center; box-shadow: 0 8px 0 #E0D5C8;
+  margin-bottom: 14px; position: relative; overflow: hidden;
+}
+#color-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: linear-gradient(90deg, #E74C3C, #FF8C42, #F4D03F, #28B463, #2E86C1, #9B59B6, #FF69B4);
+}
+#color-question { font-family: 'Fredoka One', cursive; font-size: clamp(1rem, 4vw, 1.3rem); color: #888; margin-bottom: 10px; }
+#color-sound-btn {
+  display: block; margin: 0 auto 4px;
+  width: 88px; height: 88px; border-radius: 50%;
+  background: linear-gradient(135deg, #9B59B6, #C39BD3);
+  box-shadow: 0 6px 0 #703688;
+  border: none; font-size: 2.2rem; cursor: pointer;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+#color-sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #703688; }
+#color-sound-btn.sound-pop { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1); }
+
+#color-play-area {
+  position: relative; width: 100%; max-width: 380px;
+  height: 260px; margin: 0 auto 8px;
+}
+.color-bubble {
+  position: absolute;
+  width: clamp(72px, 19vw, 90px); height: clamp(72px, 19vw, 90px);
+  border-radius: 50%; border: 4px solid rgba(255,255,255,0.7);
+  cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  animation: float-bubble var(--dur, 3s) var(--delay, 0s) ease-in-out infinite;
+  transition: opacity 0.2s;
+}
+.color-bubble:not(:disabled):active { transform: scale(0.88) !important; }
+.color-bubble.wrong  { opacity: 0.3; animation: shake 0.35s ease; }
+.color-bubble.popped { animation: bubble-pop 0.35s ease forwards !important; pointer-events: none; }
+.color-bubble.hint-glow {
+  box-shadow: 0 0 0 5px white, 0 0 0 9px #FFB347, 0 6px 0 rgba(0,0,0,0.18);
+  animation: pulse-hint 0.8s ease infinite !important;
+}
+.mode-card.colors::before { background: #9B59B6; }
+
+/* ════════════════════════════════
    MATCH GAME
    ════════════════════════════════ */
 #match-card::before { background: linear-gradient(90deg, #9B59B6, #D7BDE2, #2E86C1); }

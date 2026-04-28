@@ -35,6 +35,7 @@ more-game.html   / js/more-game.js          ⚖️  More or Less
 shapes-game.html / js/shapes-game.js        🔷 Shape Sorter
 patterns-game.html / js/patterns-game.js    🔁 Patterns
 emotions-game.html / js/emotions-game.js    😊 Feelings
+color-game.html  / js/color-game.js         🌈 Color Pop
 ```
 
 ---
@@ -46,7 +47,8 @@ emotions-game.html / js/emotions-game.js    😊 Feelings
 | 🔤 Letters | ABC Game, Trace Words, Letter Sounds |
 | 🔢 Numbers | Count & Tap, Pop the Number, Fill the Gap, More or Less |
 | 😊 Feelings | Feelings |
-| 🌈 Shapes & Patterns | Shape Sorter, Patterns |
+| 🌈 Colors | Color Pop |
+| 🔷 Shapes & Patterns | Shape Sorter, Patterns |
 
 ---
 
@@ -162,6 +164,7 @@ Each game has a unique `body.THEME-theme` that sets background gradients and `he
 | Shape Sorter | shapes-theme | #16A085 | #16A085 |
 | Patterns | patterns-theme | #E67E22 | #E67E22 |
 | Feelings | emotions-theme | #FF6B9D | #FF6B9D |
+| Color Pop | colors-theme | #9B59B6 | #9B59B6 |
 
 ### Answer button states
 ```css
