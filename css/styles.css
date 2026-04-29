@@ -459,62 +459,6 @@ body.shape-match-theme header h1 { color: #8E44AD; text-shadow: 4px 4px 0 #C39BD
 .mode-card.shape-match::before { background: #8E44AD; }
 
 /* ════════════════════════════════
-   SHAPE POP GAME
-   ════════════════════════════════ */
-body.shape-pop-theme {
-  background-image:
-    radial-gradient(circle at 20% 15%, #E0F7FA 0%, transparent 40%),
-    radial-gradient(circle at 80% 20%, #E8F5E9 0%, transparent 35%),
-    radial-gradient(circle at 50% 80%, #E0F2F1 0%, transparent 50%);
-}
-body.shape-pop-theme header h1 { color: #16A085; text-shadow: 4px 4px 0 #76D7C4; }
-
-#shape-pop-card {
-  background: white; border-radius: 28px; padding: 14px 20px 12px;
-  text-align: center; box-shadow: 0 8px 0 #E0D5C8;
-  margin-bottom: 14px; position: relative; overflow: hidden;
-}
-#shape-pop-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
-  background: linear-gradient(90deg, #FF6B6B, #2E86C1, #28B463, #9B59B6);
-}
-#shape-pop-question {
-  font-family: 'Fredoka One', cursive; font-size: clamp(1rem, 4vw, 1.3rem);
-  color: #888; margin-bottom: 10px;
-}
-#shape-pop-sound-btn {
-  display: block; margin: 0 auto 4px;
-  width: 88px; height: 88px; border-radius: 50%;
-  background: linear-gradient(135deg, #16A085, #76D7C4);
-  box-shadow: 0 6px 0 #0D7061;
-  border: none; font-size: 2.2rem; cursor: pointer;
-  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-}
-#shape-pop-sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #0D7061; }
-#shape-pop-sound-btn.sound-pop { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1); }
-
-#shape-pop-area {
-  position: relative; width: 100%; max-width: 380px;
-  height: 260px; margin: 0 auto 8px;
-}
-.shape-pop-bubble {
-  position: absolute;
-  background: none; border: none; padding: 0;
-  cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-  filter: drop-shadow(0 5px 3px rgba(0,0,0,0.2));
-  animation: float-bubble var(--dur, 3s) var(--delay, 0s) ease-in-out infinite;
-  transition: opacity 0.2s;
-}
-.shape-pop-bubble:not(:disabled):active { transform: scale(0.88) !important; }
-.shape-pop-bubble.wrong  { opacity: 0.25; animation: shake 0.35s ease; }
-.shape-pop-bubble.popped { animation: bubble-pop 0.35s ease forwards !important; pointer-events: none; }
-.shape-pop-bubble.hint-glow {
-  filter: drop-shadow(0 0 8px #FFB347) drop-shadow(0 0 16px rgba(255,179,71,0.6));
-  animation: pulse-hint 0.8s ease infinite !important;
-}
-.mode-card.shape-pop::before { background: #16A085; }
-
-/* ════════════════════════════════
    FIRST LETTER GAME
    ════════════════════════════════ */
 body.first-theme {
