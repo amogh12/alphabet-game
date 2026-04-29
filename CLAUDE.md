@@ -37,6 +37,8 @@ patterns-game.html / js/patterns-game.js    🔁 Patterns
 emotions-game.html / js/emotions-game.js    😊 Feelings
 color-game.html  / js/color-game.js         🌈 Color Pop
 first-letter-game.html / js/first-letter-game.js  🔡 First Letter
+shape-pop-game.html   / js/shape-pop-game.js        🔵 Shape Pop
+shape-match-game.html / js/shape-match-game.js      🔶 Shape Match
 ```
 
 ---
@@ -49,7 +51,7 @@ first-letter-game.html / js/first-letter-game.js  🔡 First Letter
 | 🔢 Numbers | Count & Tap, Pop the Number, Fill the Gap, More or Less |
 | 😊 Feelings | Feelings |
 | 🌈 Colors | Color Pop |
-| 🔷 Shapes & Patterns | Shape Sorter, Patterns |
+| 🔷 Shapes & Patterns | Shape Sorter, Shape Pop, Shape Match, Patterns |
 
 ---
 
@@ -167,6 +169,8 @@ Each game has a unique `body.THEME-theme` that sets background gradients and `he
 | Feelings | emotions-theme | #FF6B9D | #FF6B9D |
 | Color Pop | colors-theme | #9B59B6 | #9B59B6 |
 | First Letter | first-theme | #F39C12 | #F39C12 |
+| Shape Pop   | shape-pop-theme   | #16A085 | #16A085 |
+| Shape Match | shape-match-theme | #8E44AD | #8E44AD |
 
 ### Answer button states
 ```css
