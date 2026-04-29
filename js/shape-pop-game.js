@@ -96,7 +96,7 @@ function nextQuestion() {
     btn.dataset.shapeId = shape.id;
     btn.setAttribute('aria-label', `${shape.label} bubble`);
     btn.style.cssText = `top:${top}%; left:${left}%; --dur:${dur}s; --delay:-${delay}s;`;
-    btn.innerHTML = makeShapeSVG(shape.id, color, 58);
+    btn.innerHTML = makeShapeSVG(shape.id, color, 86);
     btn.addEventListener('click', () => handlePop(btn, shape));
     area.appendChild(btn);
   });

@@ -499,19 +499,17 @@ body.shape-pop-theme header h1 { color: #16A085; text-shadow: 4px 4px 0 #76D7C4;
 }
 .shape-pop-bubble {
   position: absolute;
-  width: clamp(96px, 24vw, 116px); height: clamp(96px, 24vw, 116px);
-  border-radius: 50%; border: 4px solid rgba(255,255,255,0.9);
-  background: white; box-shadow: 0 6px 0 rgba(0,0,0,0.12);
-  display: flex; align-items: center; justify-content: center;
+  background: none; border: none; padding: 0;
   cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 5px 3px rgba(0,0,0,0.2));
   animation: float-bubble var(--dur, 3s) var(--delay, 0s) ease-in-out infinite;
   transition: opacity 0.2s;
 }
 .shape-pop-bubble:not(:disabled):active { transform: scale(0.88) !important; }
-.shape-pop-bubble.wrong  { opacity: 0.3; animation: shake 0.35s ease; }
+.shape-pop-bubble.wrong  { opacity: 0.25; animation: shake 0.35s ease; }
 .shape-pop-bubble.popped { animation: bubble-pop 0.35s ease forwards !important; pointer-events: none; }
 .shape-pop-bubble.hint-glow {
-  box-shadow: 0 0 0 6px #FFB347, 0 6px 0 rgba(0,0,0,0.12);
+  filter: drop-shadow(0 0 8px #FFB347) drop-shadow(0 0 16px rgba(255,179,71,0.6));
   animation: pulse-hint 0.8s ease infinite !important;
 }
 .mode-card.shape-pop::before { background: #16A085; }
