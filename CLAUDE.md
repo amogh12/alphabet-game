@@ -37,6 +37,8 @@ patterns-game.html / js/patterns-game.js    🔁 Patterns
 emotions-game.html / js/emotions-game.js    😊 Feelings
 color-game.html  / js/color-game.js         🌈 Color Pop
 first-letter-game.html / js/first-letter-game.js  🔡 First Letter
+spell-game.html    / js/spell-game.js               ✏️  Spell It!
+missing-game.html  / js/missing-game.js             🔠 Missing Letter
 shape-match-game.html / js/shape-match-game.js      🔶 Shape Match
 ```
 
@@ -46,7 +48,7 @@ shape-match-game.html / js/shape-match-game.js      🔶 Shape Match
 
 | Section | Games |
 |---|---|
-| 🔤 Letters | ABC Game, Trace Words, Letter Sounds, First Letter |
+| 🔤 Letters | ABC Game, Trace Words, Letter Sounds, First Letter, Spell It!, Missing Letter |
 | 🔢 Numbers | Count & Tap, Pop the Number, Fill the Gap, More or Less |
 | 😊 Feelings | Feelings |
 | 🌈 Colors | Color Pop |
@@ -168,6 +170,8 @@ Each game has a unique `body.THEME-theme` that sets background gradients and `he
 | Feelings | emotions-theme | #FF6B9D | #FF6B9D |
 | Color Pop | colors-theme | #9B59B6 | #9B59B6 |
 | First Letter | first-theme | #F39C12 | #F39C12 |
+| Spell It! | spell-theme | #1ABC9C | #1ABC9C |
+| Missing Letter | missing-theme | #3498DB | #3498DB |
 | Shape Match | shape-match-theme | #8E44AD | #8E44AD |
 
 ### Answer button states
