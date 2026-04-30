@@ -878,4 +878,160 @@ body.emotions-theme header h1 { color: #FF6B9D; text-shadow: 4px 4px 0 #FFB347; 
 .emotion-btn.correct { background: #C8F7C5; border-color: #5CB85C; box-shadow: 0 7px 0 #4a9b4a; animation: wiggle 0.5s ease; }
 .emotion-btn.correct .emotion-face { animation: big-bounce 0.6s cubic-bezier(.34,1.56,.64,1); }
 .emotion-btn.wrong   { background: #FFE8E8; border-color: #E74C3C; box-shadow: 0 7px 0 #b03a2e; animation: shake 0.35s ease; opacity: 0.5; }
+
+/* ════════════════════════════════
+   SPELL IT GAME
+   ════════════════════════════════ */
+body.spell-theme {
+  background-image:
+    radial-gradient(circle at 10% 20%, #D5F5E3 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, #A9DFBF 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, #EAFAF1 0%, transparent 60%);
+}
+body.spell-theme header h1 { color: #1ABC9C; text-shadow: 4px 4px 0 #148F77; }
+.mode-card.spell::before { background: #1ABC9C; }
+
+#spell-card {
+  background: white; border-radius: 28px; padding: 14px 20px 16px;
+  text-align: center; box-shadow: 0 8px 0 #E0D5C8;
+  margin-bottom: 14px; position: relative; overflow: hidden;
+}
+#spell-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: linear-gradient(90deg, #1ABC9C, #28B463, #2E86C1, #9B59B6);
+}
+#spell-emoji {
+  font-size: clamp(3.5rem, 14vw, 5.5rem);
+  line-height: 1.1; display: block; margin-bottom: 4px;
+}
+#spell-sound-btn {
+  display: block; margin: 0 auto 10px;
+  width: 72px; height: 72px; border-radius: 50%;
+  border: none; background: #EAFAF1;
+  font-size: 2rem; cursor: pointer;
+  box-shadow: 0 6px 0 #A9DFBF;
+  transition: transform 0.12s, box-shadow 0.12s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+#spell-sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #A9DFBF; }
+#spell-sound-btn.sound-pop { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1); }
+
+#spell-slots {
+  display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 6px;
+}
+.spell-slot {
+  width: clamp(52px, 15vw, 70px); height: clamp(52px, 15vw, 70px);
+  border: 4px dashed #A9DFBF; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  color: #1ABC9C;
+  background: #F0FBF8;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.spell-slot.filled {
+  border-style: solid; border-color: #1ABC9C;
+  background: #D5F5E3;
+  animation: pop 0.35s cubic-bezier(.34,1.56,.64,1);
+}
+
+#spell-tiles {
+  display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
+  margin: 14px 0 8px;
+}
+.spell-tile {
+  width: clamp(62px, 18vw, 80px); height: clamp(62px, 18vw, 80px);
+  border: 4px solid transparent; border-radius: 20px;
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.8rem, 7vw, 2.4rem);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: transform 0.12s, box-shadow 0.12s, opacity 0.2s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.spell-tile:not(:disabled):active { transform: translateY(4px); box-shadow: 0 2px 0 #ccc !important; }
+.spell-tile.used    { opacity: 0.25; pointer-events: none; }
+.spell-tile.hint-glow { border-color: #FF8C42 !important; animation: pulse-hint 1s ease infinite; }
+@keyframes tile-shake {
+  0%,100%{transform:translateX(0);} 20%{transform:translateX(-8px);} 60%{transform:translateX(8px);}
+}
+.spell-tile.tile-shake { animation: tile-shake 0.35s ease; }
+
+/* ════════════════════════════════
+   MISSING LETTER GAME
+   ════════════════════════════════ */
+body.missing-theme {
+  background-image:
+    radial-gradient(circle at 15% 20%, #D6EAF8 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, #AED6F1 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, #EBF5FB 0%, transparent 60%);
+}
+body.missing-theme header h1 { color: #3498DB; text-shadow: 4px 4px 0 #1F618D; }
+.mode-card.missing::before { background: #3498DB; }
+
+#missing-card {
+  background: white; border-radius: 28px; padding: 14px 20px 16px;
+  text-align: center; box-shadow: 0 8px 0 #E0D5C8;
+  margin-bottom: 14px; position: relative; overflow: hidden;
+}
+#missing-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: linear-gradient(90deg, #3498DB, #2E86C1, #9B59B6, #1ABC9C);
+}
+#missing-emoji {
+  font-size: clamp(3.5rem, 14vw, 5.5rem);
+  line-height: 1.1; display: block; margin-bottom: 4px;
+}
+#missing-sound-btn {
+  display: block; margin: 0 auto 10px;
+  width: 72px; height: 72px; border-radius: 50%;
+  border: none; background: #EBF5FB;
+  font-size: 2rem; cursor: pointer;
+  box-shadow: 0 6px 0 #AED6F1;
+  transition: transform 0.12s, box-shadow 0.12s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+#missing-sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #AED6F1; }
+#missing-sound-btn.sound-pop { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1); }
+
+#missing-word-display {
+  display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 6px;
+}
+.missing-box {
+  width: clamp(52px, 15vw, 70px); height: clamp(52px, 15vw, 70px);
+  border: 4px solid #AED6F1; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  color: #2E86C1; background: #EBF5FB;
+}
+.missing-box-blank {
+  border-style: dashed; border-color: #FF8C42;
+  background: #FFF3E0; color: #FF8C42;
+  animation: pulse-hint 1.5s ease infinite;
+}
+.missing-box-reveal {
+  border-style: solid; border-color: #3498DB;
+  background: #D6EAF8; color: #1F618D;
+  animation: pop 0.35s cubic-bezier(.34,1.56,.64,1);
+}
+
+#missing-choices {
+  display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+  margin: 14px 0 8px;
+}
+.missing-btn {
+  width: clamp(72px, 20vw, 90px); height: clamp(72px, 20vw, 90px);
+  border: 4px solid transparent; border-radius: 20px;
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2rem, 8vw, 2.8rem);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: transform 0.12s, box-shadow 0.12s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.missing-btn:not(:disabled):active { transform: translateY(4px); box-shadow: 0 2px 0 #ccc !important; }
+.missing-btn.correct  { background: #C8F7C5 !important; border-color: #5CB85C !important; box-shadow: 0 6px 0 #4a9b4a !important; animation: wiggle 0.5s ease; }
+.missing-btn.wrong    { background: #FFE8E8 !important; border-color: #E74C3C !important; box-shadow: 0 6px 0 #b03a2e !important; animation: shake 0.35s ease; opacity: 0.5; }
+.missing-btn.hint-glow { border-color: #FF8C42 !important; animation: pulse-hint 1s ease infinite; }
 .emotion-btn.hint-glow { border-color: #FFB347; box-shadow: 0 7px 0 #e8960a; animation: pulse-hint 0.8s ease infinite; }
