@@ -99,13 +99,14 @@ function handleTile(btn, letter) {
     slot.classList.add('filled');
 
     playSound('letter-done');
-    sayLetter(letter);
     hideTryAgainMsg();
-    // Remove hint-glow now that a correct tile was tapped
     document.querySelectorAll('.spell-tile').forEach(b => b.classList.remove('hint-glow'));
 
+    const isLast = currentPos + 1 === current.word.length;
+    if (!isLast) sayLetter(letter);
+
     currentPos++;
-    if (currentPos === current.word.length) {
+    if (isLast) {
       score++;
       document.getElementById('score').textContent = score;
       hideHint();
@@ -113,9 +114,10 @@ function handleTile(btn, letter) {
       const p = PRAISE[Math.floor(Math.random() * PRAISE.length)];
       roundNum++;
       document.querySelectorAll('.spell-tile').forEach(b => b.disabled = true);
+      spellOutWord(current.word);
       setTimeout(() => {
-        showFeedbackOverlay(p[0], p[1], `${current.emoji}  ${current.word}!`, '#1ABC9C', 1800, nextQuestion);
-      }, 500);
+        showFeedbackOverlay(p[0], p[1], `${current.emoji}  ${current.word}!`, '#1ABC9C', 2200, nextQuestion);
+      }, 600);
     }
   } else {
     btn.classList.remove('tile-shake'); void btn.offsetWidth; btn.classList.add('tile-shake');

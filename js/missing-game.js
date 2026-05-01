@@ -113,12 +113,12 @@ function handleAnswer(btn, letter) {
     document.getElementById('score').textContent = score;
     hideTryAgainMsg(); hideHint();
     spawnConfetti(); playSound('correct');
-    sayLetter(correct);
+    spellOutWord(current.word);
     const p = PRAISE[Math.floor(Math.random() * PRAISE.length)];
     roundNum++;
     setTimeout(() => {
-      showFeedbackOverlay(p[0], p[1], `${current.emoji}  ${current.word}!`, '#3498DB', 1800, nextQuestion);
-    }, 400);
+      showFeedbackOverlay(p[0], p[1], `${current.emoji}  ${current.word}!`, '#3498DB', 2200, nextQuestion);
+    }, 600);
   } else {
     btn.classList.add('wrong');
     btn.disabled = true;

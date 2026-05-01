@@ -87,6 +87,26 @@ function sayWord(w) {
   window.speechSynthesis.speak(u);
 }
 
+function spellOutWord(word) {
+  if (!soundEnabled || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const STEP = 700;
+  word.split('').forEach((letter, i) => {
+    setTimeout(() => {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(letter);
+      u.rate = 0.75; u.pitch = 1.3; u.volume = 1;
+      window.speechSynthesis.speak(u);
+    }, i * STEP);
+  });
+  setTimeout(() => {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(word.toLowerCase());
+    u.rate = 0.85; u.pitch = 1.2; u.volume = 1;
+    window.speechSynthesis.speak(u);
+  }, word.length * STEP + 400);
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function shuffle(arr) {
