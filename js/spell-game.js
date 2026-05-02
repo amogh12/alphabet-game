@@ -105,7 +105,7 @@ function handleTile(btn, letter) {
     document.querySelectorAll('.spell-tile').forEach(b => b.classList.remove('hint-glow'));
 
     const isLast = currentPos + 1 === current.word.length;
-    if (!isLast) sayLetter(letter);
+    sayLetter(letter);
 
     currentPos++;
     if (isLast) {
