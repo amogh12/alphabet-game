@@ -904,6 +904,15 @@ body.spell-theme header h1 { color: #1ABC9C; text-shadow: 4px 4px 0 #148F77; }
   font-size: clamp(3.5rem, 14vw, 5.5rem);
   line-height: 1.1; display: block; margin-bottom: 4px;
 }
+#spell-word-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  letter-spacing: 0.18em;
+  color: #1ABC9C;
+  text-shadow: 2px 2px 0 #A9DFBF;
+  margin: 2px 0 8px;
+  min-height: 1.4em;
+}
 #spell-sound-btn {
   display: block; margin: 0 auto 10px;
   width: 72px; height: 72px; border-radius: 50%;

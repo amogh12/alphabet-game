@@ -77,6 +77,8 @@ function nextQuestion() {
   emojiEl.textContent = current.emoji;
   emojiEl.classList.remove('pop'); void emojiEl.offsetWidth; emojiEl.classList.add('pop');
 
+  document.getElementById('spell-word-label').textContent = current.word;
+
   buildSlots();
   buildTiles();
   buildProgress();
