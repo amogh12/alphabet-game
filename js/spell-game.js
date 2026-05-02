@@ -116,10 +116,12 @@ function handleTile(btn, letter) {
       const p = PRAISE[Math.floor(Math.random() * PRAISE.length)];
       roundNum++;
       document.querySelectorAll('.spell-tile').forEach(b => b.disabled = true);
-      spellOutWord(current.word);
+      const spellingDelay = 500;
+      const overlayDelay = spellingDelay + current.word.length * 700 + 400;
+      setTimeout(() => spellOutWord(current.word), spellingDelay);
       setTimeout(() => {
         showFeedbackOverlay(p[0], p[1], `${current.emoji}  ${current.word}!`, '#1ABC9C', 2200, nextQuestion);
-      }, 600);
+      }, overlayDelay);
     }
   } else {
     btn.classList.remove('tile-shake'); void btn.offsetWidth; btn.classList.add('tile-shake');
