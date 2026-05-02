@@ -77,7 +77,8 @@ function nextQuestion() {
   emojiEl.textContent = current.emoji;
   emojiEl.classList.remove('pop'); void emojiEl.offsetWidth; emojiEl.classList.add('pop');
 
-  document.getElementById('spell-word-label').textContent = current.word;
+  document.getElementById('spell-word-label').innerHTML =
+    current.word.split('').map((l, i) => `<span id="label-${i}">${l}</span>`).join('');
 
   buildSlots();
   buildTiles();
@@ -99,6 +100,9 @@ function handleTile(btn, letter) {
     const slot = document.getElementById(`slot-${currentPos}`);
     slot.textContent = letter;
     slot.classList.add('filled');
+
+    const labelSpan = document.getElementById(`label-${currentPos}`);
+    if (labelSpan) labelSpan.classList.add('struck');
 
     playSound('letter-done');
     hideTryAgainMsg();
