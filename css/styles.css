@@ -965,7 +965,8 @@ body.spell-theme header h1 { color: #1ABC9C; text-shadow: 4px 4px 0 #148F77; }
   touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
 .spell-tile:not(:disabled):active { transform: translateY(4px); box-shadow: 0 2px 0 #ccc !important; }
-.spell-tile.used    { opacity: 0.25; pointer-events: none; }
+.spell-tile.used      { opacity: 0.25; pointer-events: none; }
+.spell-tile.next-letter { transform: scale(1.18); }
 .spell-tile.hint-glow { border-color: #FF8C42 !important; animation: pulse-hint 1s ease infinite; }
 @keyframes tile-shake {
   0%,100%{transform:translateX(0);} 20%{transform:translateX(-8px);} 60%{transform:translateX(8px);}

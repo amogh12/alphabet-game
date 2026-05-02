@@ -48,6 +48,13 @@ function getDistractor() {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
+function highlightNextTile() {
+  const expected = current.word[currentPos];
+  document.querySelectorAll('.spell-tile').forEach(b => {
+    b.classList.toggle('next-letter', !b.classList.contains('used') && b.dataset.letter === expected);
+  });
+}
+
 function buildTiles() {
   const container = document.getElementById('spell-tiles');
   container.innerHTML = '';
@@ -82,6 +89,7 @@ function nextQuestion() {
 
   buildSlots();
   buildTiles();
+  highlightNextTile();
   buildProgress();
 
   const soundBtn = document.getElementById('spell-sound-btn');
@@ -112,6 +120,7 @@ function handleTile(btn, letter) {
     sayLetter(letter);
 
     currentPos++;
+    if (!isLast) highlightNextTile();
     if (isLast) {
       score++;
       document.getElementById('score').textContent = score;
