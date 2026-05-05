@@ -51,6 +51,17 @@ function renderWordDisplay() {
     }
     container.appendChild(box);
   });
+
+  const label = document.getElementById('missing-word-label');
+  label.innerHTML = '';
+  current.word.split('').forEach((letter, i) => {
+    const span = document.createElement('span');
+    span.textContent = letter;
+    if (i === current.blankPos) {
+      span.className = 'missing-label-key';
+    }
+    label.appendChild(span);
+  });
 }
 
 function nextQuestion() {
