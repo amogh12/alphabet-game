@@ -53,6 +53,9 @@ function highlightNextTile() {
   document.querySelectorAll('.spell-tile').forEach(b => {
     b.classList.toggle('next-letter', !b.classList.contains('used') && b.dataset.letter === expected);
   });
+  document.querySelectorAll('#spell-word-label span').forEach((s, i) => {
+    s.classList.toggle('next-letter', i === currentPos);
+  });
 }
 
 function buildTiles() {
@@ -121,6 +124,7 @@ function handleTile(btn, letter) {
 
     currentPos++;
     if (!isLast) highlightNextTile();
+    else document.querySelectorAll('#spell-word-label span').forEach(s => s.classList.remove('next-letter'));
     if (isLast) {
       score++;
       document.getElementById('score').textContent = score;
