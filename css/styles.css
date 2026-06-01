@@ -915,9 +915,9 @@ body.spell-theme header h1 { color: #1ABC9C; text-shadow: 4px 4px 0 #148F77; }
 }
 #spell-word-label span { transition: color 0.2s, text-shadow 0.2s, font-size 0.2s, transform 0.2s; display: inline-block; }
 #spell-word-label span.next-letter {
-  color: #0E8C6A;
+  color: #FF8C42;
   font-size: clamp(2.2rem, 8vw, 3.2rem);
-  text-shadow: 3px 3px 0 #A9DFBF, 0 0 12px #1ABC9C55;
+  text-shadow: 3px 3px 0 #FFD0A8, 0 0 12px #FF8C4266;
   transform: translateY(-2px);
 }
 #spell-word-label span.struck {
