@@ -1,22 +1,44 @@
-const PHONICS = {
+const PHONICS_TTS = {
   A:'aah', B:'buh', C:'kuh', D:'duh', E:'eh',
   F:'fff', G:'guh', H:'huh', I:'ih',  J:'juh',
-  K:'kuh', L:'lll', M:'mmm', N:'nnn', O:'oh',
-  P:'puh', Q:'kwuh',R:'ruh', S:'sss', T:'tuh',
-  U:'uh',  V:'vuh', W:'wuh', X:'ksss',Y:'yuh', Z:'zzz'
+  K:'kuh', L:'lll', M:'mmm', N:'nnn', O:'aw',
+  P:'puh', Q:'kwuh',R:'rrr', S:'sss', T:'tuh',
+  U:'uh',  V:'vvv', W:'wuh', X:'ksss',Y:'yuh', Z:'zzz'
 };
 
 const ROUNDS = 8;
 let queue = [], current = null, score = 0, roundNum = 0, wrongCount = 0;
 let blending = false;
 
+function playAudioFile(src) {
+  return new Promise(resolve => {
+    const a = new Audio(src);
+    a.onended = resolve;
+    a.onerror = resolve;
+    a.play().catch(resolve);
+  });
+}
+
 function sayPhoneme(letter) {
-  if (!soundEnabled || !window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const sound = PHONICS[letter.toUpperCase()] || letter;
-  const u = new SpeechSynthesisUtterance(sound);
-  u.rate = 0.55; u.pitch = 1.2; u.volume = 1;
-  window.speechSynthesis.speak(u);
+  if (!soundEnabled) return;
+  const file = `audio/phonics/${letter.toLowerCase()}.wav`;
+  const a = new Audio(file);
+  a.onerror = () => {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(PHONICS_TTS[letter.toUpperCase()] || letter);
+    u.rate = 0.55; u.pitch = 1.2; u.volume = 1;
+    window.speechSynthesis.speak(u);
+  };
+  a.play().catch(() => {});
+}
+
+function sayWordAudio(word) {
+  if (!soundEnabled) return;
+  const file = `audio/phonics/${word.toLowerCase()}.wav`;
+  const a = new Audio(file);
+  a.onerror = () => sayWord(word);
+  a.play().catch(() => sayWord(word));
 }
 
 function darken(hex) {
@@ -73,7 +95,7 @@ function nextQuestion() {
   document.getElementById('blend-btn').disabled = false;
 
   buildProgress();
-  setTimeout(() => sayWord(current.word.toLowerCase()), 500);
+  setTimeout(() => sayWordAudio(current.word.toLowerCase()), 500);
 }
 
 function doBlend() {
@@ -98,7 +120,7 @@ function doBlend() {
   setTimeout(() => {
     tiles.forEach(t => t.classList.remove('tile-active'));
     window.speechSynthesis.cancel();
-    sayWord(current.word.toLowerCase());
+    sayWordAudio(current.word.toLowerCase());
     setTimeout(showQuiz, 950);
   }, letters.length * 520 + 420);
 }
@@ -168,7 +190,7 @@ function hideHint() {
   document.querySelectorAll('.phonics-answer-btn.hint-glow').forEach(b => b.classList.remove('hint-glow'));
 }
 function activateHint() {
-  playSound('hint'); sayWord(current.word.toLowerCase());
+  playSound('hint'); sayWordAudio(current.word.toLowerCase());
   document.querySelectorAll('.phonics-answer-btn').forEach(btn => {
     if (!btn.disabled && btn.dataset.word === current.word) btn.classList.add('hint-glow');
   });
