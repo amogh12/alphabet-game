@@ -1,14 +1,7 @@
-const PHONICS_TTS = {
-  A:'aah', B:'buh', C:'kuh', D:'duh', E:'eh',
-  F:'fff', G:'guh', H:'huh', I:'ih',  J:'juh',
-  K:'kuh', L:'lll', M:'mmm', N:'nnn', O:'aw',
-  P:'puh', Q:'kwuh',R:'rrr', S:'sss', T:'tuh',
-  U:'uh',  V:'vvv', W:'wuh', X:'ksss',Y:'yuh', Z:'zzz'
-};
-
 const ROUNDS = 8;
-let queue = [], current = null, score = 0, roundNum = 0, wrongCount = 0;
+let queue = [], current = null, score = 0, roundNum = 0;
 let blending = false;
+let tappedIndices = new Set();   // tracks which tile positions have been tapped
 
 function playAudioFile(src) {
   return new Promise(resolve => {
@@ -21,11 +14,16 @@ function playAudioFile(src) {
 
 function sayPhoneme(letter) {
   if (!soundEnabled) return;
-  const file = `audio/phonics/${letter.toLowerCase()}.wav`;
-  const a = new Audio(file);
+  const a = new Audio(`audio/phonics/${letter.toLowerCase()}.mp3`);
   a.onerror = () => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
+    const PHONICS_TTS = {
+      A:'aah', B:'buh', C:'kuh', D:'duh', E:'eh', F:'ffffff', G:'guh',
+      H:'huh', I:'ih', J:'juh', K:'kuh', L:'llll', M:'mmmm', N:'nnnn',
+      O:'aw', P:'puh', Q:'kwuh', R:'rrrr', S:'sssss', T:'tuh', U:'uh',
+      V:'vvvv', W:'wuh', X:'ksss', Y:'yuh', Z:'zzzz'
+    };
     const u = new SpeechSynthesisUtterance(PHONICS_TTS[letter.toUpperCase()] || letter);
     u.rate = 0.55; u.pitch = 1.2; u.volume = 1;
     window.speechSynthesis.speak(u);
@@ -35,8 +33,7 @@ function sayPhoneme(letter) {
 
 function sayWordAudio(word) {
   if (!soundEnabled) return;
-  const file = `audio/phonics/${word.toLowerCase()}.wav`;
-  const a = new Audio(file);
+  const a = new Audio(`audio/phonics/${word.toLowerCase()}.mp3`);
   a.onerror = () => sayWord(word);
   a.play().catch(() => sayWord(word));
 }
@@ -59,17 +56,34 @@ function buildProgress() {
   }
 }
 
+function checkAllTapped() {
+  if (tappedIndices.size < current.word.length) return;
+  const btn = document.getElementById('blend-btn');
+  btn.disabled = false;
+  btn.classList.add('blend-ready');
+  document.getElementById('phonics-hint-text').textContent = 'Now press Blend it! 👇';
+}
+
 function nextQuestion() {
   if (roundNum >= ROUNDS) { showEnd(); return; }
-  wrongCount = 0;
   blending = false;
-  hideTryAgainMsg(); hideHint();
+  tappedIndices = new Set();
 
   current = queue[roundNum];
   document.getElementById('round').textContent = roundNum + 1;
-  document.getElementById('phonics-emoji').textContent = current.emoji;
+
+  // Picture hidden — child must decode first
+  const emojiEl = document.getElementById('phonics-emoji');
+  emojiEl.textContent = '❓';
+  emojiEl.classList.remove('reveal-pop');
   document.getElementById('phonics-hint-text').textContent = 'Tap each letter!';
 
+  // Blend button disabled until all letters tapped
+  const blendBtn = document.getElementById('blend-btn');
+  blendBtn.disabled = true;
+  blendBtn.classList.remove('blend-ready');
+
+  // Build letter tiles
   const tileColors = ['#FF6B6B', '#FF8C42', '#5CB85C', '#2E86C1', '#8E44AD'];
   const container = document.getElementById('letter-tiles');
   container.innerHTML = '';
@@ -79,95 +93,75 @@ function nextQuestion() {
     const color = tileColors[i % tileColors.length];
     btn.style.background = color;
     btn.style.boxShadow = `0 7px 0 ${darken(color)}`;
-    btn.textContent = letter;
+    btn.textContent = letter.toUpperCase();
     btn.addEventListener('click', () => {
       if (blending) return;
       sayPhoneme(letter);
-      btn.classList.remove('tile-bounce');
+      btn.classList.remove('tile-bounce', 'tile-tapped');
       void btn.offsetWidth;
-      btn.classList.add('tile-bounce');
+      btn.classList.add('tile-bounce', 'tile-tapped');
+      tappedIndices.add(i);
+      checkAllTapped();
     });
     container.appendChild(btn);
   });
 
   document.getElementById('blend-area').style.display = 'block';
-  document.getElementById('phonics-quiz').style.display = 'none';
-  document.getElementById('blend-btn').disabled = false;
-
   buildProgress();
-  setTimeout(() => sayWordAudio(current.word.toLowerCase()), 500);
 }
 
 function doBlend() {
   if (blending) return;
   blending = true;
-  document.getElementById('blend-btn').disabled = true;
-  document.getElementById('phonics-hint-text').textContent = 'Listen carefully!';
+  const btn = document.getElementById('blend-btn');
+  btn.disabled = true;
+  btn.classList.remove('blend-ready');
+  document.getElementById('phonics-hint-text').textContent = 'Listen carefully…';
 
   const letters = current.word.split('');
   const tiles = document.querySelectorAll('.phonics-tile');
 
+  // Play each phoneme with tile highlight
   letters.forEach((letter, i) => {
     setTimeout(() => {
       tiles.forEach(t => t.classList.remove('tile-active'));
-      if (tiles[i]) {
-        tiles[i].classList.add('tile-active', 'tile-bounce');
-      }
+      if (tiles[i]) tiles[i].classList.add('tile-active', 'tile-bounce');
       sayPhoneme(letter);
     }, i * 520);
   });
 
+  // After all phonemes, play full word then reveal
   setTimeout(() => {
     tiles.forEach(t => t.classList.remove('tile-active'));
-    window.speechSynthesis.cancel();
+    window.speechSynthesis && window.speechSynthesis.cancel();
     sayWordAudio(current.word.toLowerCase());
-    setTimeout(showQuiz, 950);
+    setTimeout(revealPicture, 950);
   }, letters.length * 520 + 420);
 }
 
-function showQuiz() {
-  document.getElementById('blend-area').style.display = 'none';
-  document.getElementById('phonics-quiz').style.display = 'block';
-  document.getElementById('phonics-hint-text').textContent = 'Which picture?';
-  document.getElementById('phonics-emoji').textContent = '❓';
+function revealPicture() {
+  const emojiEl = document.getElementById('phonics-emoji');
+  emojiEl.textContent = current.emoji;
+  void emojiEl.offsetWidth;
+  emojiEl.classList.add('reveal-pop');
 
-  const pool = TRACE_WORDS.filter(w => w.word !== current.word);
-  shuffle(pool);
-  const options = shuffle([current, pool[0], pool[1], pool[2]]);
+  document.getElementById('phonics-hint-text').textContent =
+    current.word.toLowerCase() + '!';
 
-  const container = document.getElementById('phonics-quiz-answers');
-  container.innerHTML = '';
-  options.forEach(item => {
-    const btn = document.createElement('button');
-    btn.className = 'answer-btn phonics-answer-btn';
-    btn.setAttribute('data-word', item.word);
-    btn.innerHTML = `<span class="emoji" style="font-size:clamp(2.8rem,12vw,4rem)">${item.emoji}</span>`;
-    btn.addEventListener('click', () => handleQuizPick(btn, item));
-    container.appendChild(btn);
-  });
-}
+  spawnConfetti();
+  playSound('correct');
+  score++;
+  document.getElementById('score').textContent = score;
 
-function handleQuizPick(btn, item) {
-  if (btn.disabled || btn.classList.contains('wrong') || btn.classList.contains('correct')) return;
-  if (item.word === current.word) {
-    btn.classList.add('correct');
-    document.querySelectorAll('.phonics-answer-btn').forEach(b => b.disabled = true);
-    score++;
-    document.getElementById('score').textContent = score;
-    spawnConfetti(); playSound('correct');
-    hideTryAgainMsg(); hideHint();
-    document.getElementById('phonics-emoji').textContent = current.emoji;
-    const p = PRAISE[Math.floor(Math.random() * PRAISE.length)];
-    roundNum++;
-    setTimeout(() => {
-      showFeedbackOverlay(p[0], p[1], `${current.emoji} ${current.word.toLowerCase()}!`, '#FF5722', 1800, nextQuestion);
-    }, 400);
-  } else {
-    btn.classList.add('wrong'); btn.disabled = true;
-    wrongCount++; playSound('wrong'); showTryAgainMsg();
-    if (wrongCount >= 1) showHint();
-    if (wrongCount >= 2) activateHint();
-  }
+  const p = PRAISE[Math.floor(Math.random() * PRAISE.length)];
+  roundNum++;
+  setTimeout(() => {
+    showFeedbackOverlay(
+      p[0], p[1],
+      `${current.emoji} ${current.word.toLowerCase()}!`,
+      '#FF5722', 2000, nextQuestion
+    );
+  }, 900);
 }
 
 function showEnd() {
@@ -175,25 +169,6 @@ function showEnd() {
   showFeedbackOverlay('🎓', `🌟 ${score}/${ROUNDS}`,
     score === ROUNDS ? 'You read every word! 🏆' : 'Great reading! Play again! 🔄',
     '#FF5722', 3500, restartGame);
-}
-
-function showTryAgainMsg() {
-  const el = document.getElementById('try-again-msg');
-  el.textContent = ENCOURAGE[Math.floor(Math.random() * ENCOURAGE.length)];
-  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
-}
-function hideTryAgainMsg() { document.getElementById('try-again-msg').classList.remove('show'); }
-
-function showHint() { document.getElementById('hint-btn').classList.add('visible'); }
-function hideHint() {
-  document.getElementById('hint-btn').classList.remove('visible');
-  document.querySelectorAll('.phonics-answer-btn.hint-glow').forEach(b => b.classList.remove('hint-glow'));
-}
-function activateHint() {
-  playSound('hint'); sayWordAudio(current.word.toLowerCase());
-  document.querySelectorAll('.phonics-answer-btn').forEach(btn => {
-    if (!btn.disabled && btn.dataset.word === current.word) btn.classList.add('hint-glow');
-  });
 }
 
 function restartGame() {
@@ -205,6 +180,10 @@ function restartGame() {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('blend-btn').addEventListener('click', doBlend);
-  document.getElementById('hint-btn').addEventListener('click', () => { activateHint(); playSound('hint'); });
+  // Hint plays the word so child knows what they're decoding
+  document.getElementById('hint-btn').addEventListener('click', () => {
+    playSound('hint');
+    sayWordAudio(current.word.toLowerCase());
+  });
   restartGame();
 });

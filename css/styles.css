@@ -1127,6 +1127,28 @@ body.phonics-theme header h1 { color: #FF5722; text-shadow: 4px 4px 0 #FF8C42; }
   70% { transform: scale(0.95) rotate(3deg); }
   100%{ transform: scale(1); }
 }
+/* tapped tile gets a checkmark-green tint */
+.phonics-tile.tile-tapped {
+  filter: brightness(1.1) saturate(1.2);
+  box-shadow: 0 7px 0 rgba(0,0,0,0.25), 0 0 0 4px rgba(255,255,255,0.5) !important;
+}
+/* blend button pulses when all letters tapped */
+#blend-btn.blend-ready {
+  animation: blend-pulse 0.9s ease-in-out infinite alternate;
+}
+@keyframes blend-pulse {
+  from { transform: scale(1);    box-shadow: 0 7px 0 #BF360C; }
+  to   { transform: scale(1.06); box-shadow: 0 10px 0 #BF360C, 0 0 20px rgba(255,87,34,0.4); }
+}
+/* picture reveal pop */
+#phonics-emoji.reveal-pop {
+  animation: reveal-pop 0.55s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes reveal-pop {
+  0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+  60%  { transform: scale(1.2) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg);  opacity: 1; }
+}
 
 #blend-area { text-align: center; margin-bottom: 14px; }
 #blend-btn {

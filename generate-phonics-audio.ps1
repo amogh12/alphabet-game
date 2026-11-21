@@ -17,24 +17,50 @@ $outDir = "$PSScriptRoot\audio\phonics"
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 Write-Host "Output: $outDir`n"
 
-# Phoneme sounds — tuned for clarity
-$phonemes = [ordered]@{
+# Plain-text phonemes — TTS reads these naturally as sounds (not letter names)
+$plainPhonemes = [ordered]@{
     'a' = 'aah';  'b' = 'buh';  'c' = 'kuh';  'd' = 'duh';  'e' = 'eh';
-    'f' = 'fff';  'g' = 'guh';  'h' = 'huh';  'i' = 'ih';   'j' = 'juh';
-    'k' = 'kuh';  'l' = 'lll';  'm' = 'mmm';  'n' = 'nnn';  'o' = 'aw';
-    'p' = 'puh';  'q' = 'kwuh'; 'r' = 'rrr';  's' = 'sss';  't' = 'tuh';
-    'u' = 'uh';   'v' = 'vvv';  'w' = 'wuh';  'x' = 'ksss'; 'y' = 'yuh'; 'z' = 'zzz'
+    'g' = 'guh';  'h' = 'huh';  'i' = 'ih';   'j' = 'juh';
+    'k' = 'kuh';  'o' = 'aw';
+    'p' = 'puh';  'q' = 'kwuh'; 't' = 'tuh';
+    'u' = 'uh';   'w' = 'wuh';  'y' = 'yuh'
 }
 
-# Slow rate for phonemes so they sound distinct (-10 to 10, default 0)
+# SSML phonemes — repeated letters like "sss" get read as letter names by TTS.
+# Use x-microsoft-sapi phoneme codes to force the actual consonant sounds.
+# ph="S S S" = three /s/ phonemes in sequence = prolonged hiss.
+$ssmlPhonemes = [ordered]@{
+    'f' = 'F F F F';    # voiceless labiodental fricative
+    'l' = 'L L L';      # alveolar lateral
+    'm' = 'M M M';      # bilabial nasal
+    'n' = 'N N N';      # alveolar nasal
+    'r' = 'R R R';      # approximant
+    's' = 'S S S S';    # voiceless alveolar fricative
+    'v' = 'V V V';      # voiced labiodental fricative
+    'x' = 'K S S S';    # /k/ + prolonged /s/ for "ks" sound
+    'z' = 'Z Z Z'       # voiced alveolar fricative
+}
+
 $synth.Rate = -3
 $synth.Volume = 100
 
-foreach ($letter in $phonemes.Keys) {
+# Plain text phonemes
+foreach ($letter in $plainPhonemes.Keys) {
     $file = "$outDir\$letter.wav"
     $synth.SetOutputToWaveFile($file)
-    $synth.Speak($phonemes[$letter])
-    Write-Host "  $letter.wav  ->  '$($phonemes[$letter])'"
+    $synth.Speak($plainPhonemes[$letter])
+    Write-Host "  $letter.wav  ->  '$($plainPhonemes[$letter])'"
+}
+
+# SSML phonemes
+$ssmlNs = 'http://www.w3.org/2001/10/synthesis'
+foreach ($letter in $ssmlPhonemes.Keys) {
+    $ph = $ssmlPhonemes[$letter]
+    $ssml = "<?xml version='1.0'?><speak version='1.0' xmlns='$ssmlNs' xml:lang='en-US'><phoneme alphabet='x-microsoft-sapi' ph='$ph'>$letter</phoneme></speak>"
+    $file = "$outDir\$letter.wav"
+    $synth.SetOutputToWaveFile($file)
+    $synth.SpeakSsml($ssml)
+    Write-Host "  $letter.wav  ->  SSML ph='$ph'"
 }
 
 # Normal rate for full words
@@ -52,5 +78,5 @@ foreach ($word in $words) {
 $synth.SetOutputToDefaultAudioDevice()
 $synth.Dispose()
 
-Write-Host "`nDone! $($phonemes.Count + $words.Count) files generated."
+Write-Host "`nDone! $($plainPhonemes.Count + $ssmlPhonemes.Count + $words.Count) files generated."
 Write-Host "Now commit the audio/ folder and push."
