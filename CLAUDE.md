@@ -40,6 +40,8 @@ first-letter-game.html / js/first-letter-game.js  🔡 First Letter
 spell-game.html    / js/spell-game.js               ✏️  Spell It!
 missing-game.html  / js/missing-game.js             🔠 Missing Letter
 shape-match-game.html / js/shape-match-game.js      🔶 Shape Match
+phonics-game.html    / js/phonics-game.js            🗣️  Sound It Out
+word-match-game.html / js/word-match-game.js         👁️  Read It!
 ```
 
 ---
@@ -49,6 +51,7 @@ shape-match-game.html / js/shape-match-game.js      🔶 Shape Match
 | Section | Games |
 |---|---|
 | 🔤 Letters | ABC Game, Trace Words, Letter Sounds, First Letter, Spell It!, Missing Letter |
+| 📖 Reading | Sound It Out!, Read It! |
 | 🔢 Numbers | Count & Tap, Pop the Number, Fill the Gap, More or Less |
 | 😊 Feelings | Feelings |
 | 🌈 Colors | Color Pop |
@@ -173,6 +176,8 @@ Each game has a unique `body.THEME-theme` that sets background gradients and `he
 | Spell It! | spell-theme | #1ABC9C | #1ABC9C |
 | Missing Letter | missing-theme | #3498DB | #3498DB |
 | Shape Match | shape-match-theme | #8E44AD | #8E44AD |
+| Sound It Out | phonics-theme | #FF5722 | #FF5722 |
+| Read It! | word-match-theme | #00897B | #00897B |
 
 ### Answer button states
 ```css
