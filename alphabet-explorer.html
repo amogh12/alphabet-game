@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FFF9F0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
+<title>Alphabet Sounds – ABC Fun!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="alphabet-explorer-theme">
+
+<button id="sound-toggle" aria-label="Toggle sound">🔊</button>
+<a id="back-btn" href="index.html">← Home</a>
+
+<header>
+  <h1>🔤 Alphabet Sounds</h1>
+  <p>Tap a letter to hear its sound!</p>
+</header>
+
+<div id="game">
+
+  <!-- A-Z strip — tap any letter to jump to it -->
+  <div id="alpha-strip">
+    <div id="alpha-chips"></div>
+  </div>
+
+  <!-- Big letter card -->
+  <div id="explorer-card" role="button" aria-label="Tap to hear sound">
+    <div id="explorer-letter"></div>
+    <div id="explorer-tap-hint">Tap me!</div>
+  </div>
+
+  <!-- Example word -->
+  <div id="explorer-example">
+    <span id="explorer-emoji"></span>
+    <span id="explorer-word"></span>
+  </div>
+
+  <!-- Navigation arrows -->
+  <div id="explorer-nav">
+    <button id="prev-btn" class="nav-btn" aria-label="Previous letter">&#8592;</button>
+    <div id="explorer-position"></div>
+    <button id="next-btn" class="nav-btn" aria-label="Next letter">&#8594;</button>
+  </div>
+
+</div>
+
+<script src="js/shared.js"></script>
+<script src="js/alphabet-explorer.js"></script>
+</body>
+</html>

@@ -1219,3 +1219,105 @@ body.word-match-theme header h1 { color: #00897B; text-shadow: 4px 4px 0 #004D40
 .word-match-btn { min-height: 100px; justify-content: center; }
 .word-match-btn.hint-glow { border-color: #FFB347; box-shadow: 0 7px 0 #e8960a; animation: pulse-hint 0.8s ease infinite; }
 .mode-card.word-match::before { background: #00897B; }
+
+/* ════════════════════════════════
+   ALPHABET EXPLORER
+   ════════════════════════════════ */
+body.alphabet-explorer-theme {
+  background-image:
+    radial-gradient(circle at 10% 20%, #FFF3E0 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, #E8F5E9 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, #E3F2FD 0%, transparent 60%);
+}
+body.alphabet-explorer-theme header h1 { color: #7B1FA2; text-shadow: 4px 4px 0 #CE93D8; }
+
+/* A-Z chip strip */
+#alpha-strip {
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding: 8px 4px 12px; margin-bottom: 10px;
+  scrollbar-width: none;
+}
+#alpha-strip::-webkit-scrollbar { display: none; }
+#alpha-chips {
+  display: flex; gap: 8px;
+  width: max-content; padding: 0 8px;
+}
+.alpha-chip {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: none; cursor: pointer;
+  font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: white;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s, box-shadow 0.12s, opacity 0.2s;
+  flex-shrink: 0;
+}
+.alpha-chip:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.25); }
+.alpha-chip.active {
+  transform: scale(1.25) translateY(-3px);
+  box-shadow: 0 7px 0 rgba(0,0,0,0.3), 0 0 0 4px rgba(255,255,255,0.7);
+  z-index: 1; position: relative;
+}
+
+/* Big letter card */
+#explorer-card {
+  width: min(220px, 60vw); height: min(220px, 60vw);
+  margin: 0 auto 16px;
+  border-radius: 32px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 10px 0 rgba(0,0,0,0.2);
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s, box-shadow 0.12s;
+  user-select: none;
+}
+#explorer-card:active { transform: translateY(6px); box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+#explorer-card.card-bounce { animation: card-bounce 0.45s cubic-bezier(.34,1.56,.64,1); }
+@keyframes card-bounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+#explorer-letter {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(5rem, 22vw, 9rem);
+  color: white; text-shadow: 4px 6px 0 rgba(0,0,0,0.2);
+  line-height: 1;
+}
+#explorer-tap-hint {
+  font-family: 'Nunito', sans-serif; font-weight: 800;
+  font-size: 0.9rem; color: rgba(255,255,255,0.85);
+  margin-top: 4px;
+}
+
+/* Example word row */
+#explorer-example {
+  text-align: center; margin-bottom: 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+#explorer-emoji { font-size: clamp(2.8rem, 12vw, 4.5rem); line-height: 1; }
+#explorer-word {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.6rem, 7vw, 2.4rem);
+  color: #555; letter-spacing: 0.06em;
+}
+#explorer-word span.first-letter { color: #7B1FA2; }
+
+/* Nav row */
+#explorer-nav {
+  display: flex; align-items: center; justify-content: center; gap: 20px;
+}
+.nav-btn {
+  width: 60px; height: 60px; border-radius: 50%;
+  border: none; background: white; cursor: pointer;
+  font-size: 1.8rem; font-weight: 800; color: #555;
+  box-shadow: 0 6px 0 #ccc;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.nav-btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 #ccc; }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+#explorer-position {
+  font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: #aaa;
+  min-width: 70px; text-align: center;
+}
+
+.mode-card.alpha-explorer::before { background: #7B1FA2; }
