@@ -19,7 +19,7 @@
 
 <header>
   <h1>🗣️ Sound It Out!</h1>
-  <p>Tap the letters, blend, discover the word!</p>
+  <p>Tap the sounds, slide to blend, read the word!</p>
 </header>
 
 <div id="scorebar">
@@ -32,16 +32,16 @@
 
   <div id="phonics-card">
     <div id="phonics-emoji"></div>
-    <div id="phonics-hint-text">Tap each letter!</div>
+    <div id="phonics-hint-text">Tap each sound!</div>
   </div>
 
   <div id="letter-tiles"></div>
 
-  <div id="blend-area">
-    <button id="blend-btn">🔊 Blend it!</button>
+  <div id="blend-track" aria-label="Slide to blend the sounds">
+    <div id="blend-arrow"></div>
+    <div id="blend-ball">👆</div>
   </div>
 
-  <div id="hint-area"><button id="hint-btn">💡 Hint</button></div>
 </div>
 
 <div id="feedback" role="dialog" aria-modal="true">

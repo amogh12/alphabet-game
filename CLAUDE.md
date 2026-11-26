@@ -41,7 +41,6 @@ spell-game.html    / js/spell-game.js               ✏️  Spell It!
 missing-game.html  / js/missing-game.js             🔠 Missing Letter
 shape-match-game.html / js/shape-match-game.js      🔶 Shape Match
 phonics-game.html    / js/phonics-game.js            🗣️  Sound It Out
-word-match-game.html / js/word-match-game.js         👁️  Read It!
 alphabet-explorer.html / js/alphabet-explorer.js    🔤 Alphabet Sounds
 ```
 
@@ -52,7 +51,7 @@ alphabet-explorer.html / js/alphabet-explorer.js    🔤 Alphabet Sounds
 | Section | Games |
 |---|---|
 | 🔤 Letters | ABC Game, Trace Words, Letter Sounds, First Letter, Spell It!, Missing Letter, Alphabet Sounds |
-| 📖 Reading | Sound It Out!, Read It! |
+| 📖 Reading | Sound It Out! |
 | 🔢 Numbers | Count & Tap, Pop the Number, Fill the Gap, More or Less |
 | 😊 Feelings | Feelings |
 | 🌈 Colors | Color Pop |
@@ -178,7 +177,6 @@ Each game has a unique `body.THEME-theme` that sets background gradients and `he
 | Missing Letter | missing-theme | #3498DB | #3498DB |
 | Shape Match | shape-match-theme | #8E44AD | #8E44AD |
 | Sound It Out | phonics-theme | #FF5722 | #FF5722 |
-| Read It! | word-match-theme | #00897B | #00897B |
 | Alphabet Sounds | alphabet-explorer-theme | #7B1FA2 | #7B1FA2 |
 
 ### Answer button states
@@ -256,4 +254,6 @@ Cards with an odd count in a grid auto-span full width via:
 | match-game.html | Kept on disk, removed from home screen (replaced by Pop the Number) |
 | Speech in setTimeout | Breaks user-gesture context in some browsers — always call speak() directly in handler |
 | Sequence readout | Single utterance `nums.join(', ')` at rate=1.8; tile highlights at STEP=650ms independently |
+| Read It! (word-match) | Deleted — not useful; Sound It Out covers reading |
+| Sound It Out words | Own `PHONICS_WORDS` list (42 short-vowel CVC words) in phonics-game.js, not TRACE_WORDS. Each round: tap sounds, drag blend slider (tap arrow = auto-blend), word spoken + picture revealed, next word auto-loads. No picture-choice or scramble/build step — user prefers simple reading |
 | Capacitor/app store | Not started — ~3-4 weeks effort, main blocker is replacing Web Speech API with native TTS plugin |
